@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -347,7 +346,7 @@
    Sem URL preenchida, o painel funciona localmente (não quebra).
    ================================================================= */
 const GAS_URL='https://script.google.com/macros/s/AKfycbwD0LTQ8GvJaHa2H2XgEW8S0T6skRCc1kC8zF4Zm19U/exec';
-const GAS_TOKEN='senhaprojetos1!'; // use o MESMO valor no TOKEN do Codigo.gs
+const GAS_TOKEN='troque-por-um-segredo'; // use o MESMO valor no TOKEN do Codigo.gs
 const useGas=!!GAS_URL;
 
 const KEY='painel:projetos:v3';
@@ -356,12 +355,13 @@ let memCache=null;
 /* camada local: Claude artifact -> localStorage -> memória */
 async function localGet(){if(hasStore){try{const r=await window.storage.get(KEY);return r&&r.value?JSON.parse(r.value):null;}catch(e){return null;}}try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):memCache;}catch(e){return memCache;}}
 async function localSet(d){memCache=d;if(hasStore){try{await window.storage.set(KEY,JSON.stringify(d));}catch(e){}return;}try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
-/* camada Google Apps Script: GET lê tudo; POST text/plain grava (sem preflight de CORS) */
-async function gasGet(){const r=await fetch(GAS_URL+'?t='+Date.now()+'&token='+encodeURIComponent(GAS_TOKEN),{method:'GET',cache:'no-store'});if(!r.ok)throw new Error('GET '+r.status);return r.json();}
+/* camada Google Apps Script: leitura via JSONP (imune a CORS); gravação via POST text/plain */
+let syncOk=false,_jp=0;
+function gasGet(){return new Promise((resolve,reject)=>{const cb='__gascb'+(++_jp);const s=document.createElement('script');const tm=setTimeout(()=>{cu();reject(new Error('timeout'));},15000);function cu(){clearTimeout(tm);try{delete window[cb];}catch(e){window[cb]=undefined;}if(s.parentNode)s.parentNode.removeChild(s);}window[cb]=d=>{cu();resolve(d);};s.onerror=()=>{cu();reject(new Error('jsonp'));};s.src=GAS_URL+'?callback='+cb+'&token='+encodeURIComponent(GAS_TOKEN)+'&t='+Date.now();document.body.appendChild(s);});}
 async function gasPost(body){await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({token:GAS_TOKEN},body))});}
 /* API usada pelo app */
 async function loadData(){
-  if(useGas){try{const db=await gasGet();if(db&&db.error){console.error('Google:',db.error);return memCache;}if(!db||!db.projects||!db.projects.length){if(!db||!(db.team&&db.team.length))return null;}return {projects:db.projects||[],team:db.team||[],empresaInterna:db.empresaInterna,gestorPin:db.gestorPin};}catch(e){console.error('Google load:',e);return memCache;}}
+  if(useGas){try{const db=await gasGet();if(db&&db.error){console.error('Google:',db.error);syncOk=false;return memCache;}syncOk=true;if(!db||!db.projects||!db.projects.length){if(!db||!(db.team&&db.team.length))return null;}return {projects:db.projects||[],team:db.team||[],empresaInterna:db.empresaInterna,gestorPin:db.gestorPin};}catch(e){console.error('Google load:',e);syncOk=false;return memCache;}}
   return localGet();
 }
 async function saveAll(d){memCache=d;if(useGas){try{await gasPost({op:'saveAll',data:d});}catch(e){console.error(e);}return;}return localSet(d);}
@@ -474,7 +474,7 @@ function applyGestor(){const nav=$('#navEquipe');if(nav)nav.classList.toggle('hi
 function filtered(){const r=$('#fResp').value,s=$('#fStatus').value;return DB.projects.filter(p=>(!r||p.resp===r)&&(!s||p.status===s));}
 
 /* ===== INIT ===== */
-async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;if(DB.team)DB.team=DB.team.map(p=>typeof p==='string'?{nome:p,empresa:''}:p);if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}buildFilters();bindNav();render();if(useGas){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);}}
+async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;if(DB.team)DB.team=DB.team.map(p=>typeof p==='string'?{nome:p,empresa:''}:p);if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}buildFilters();bindNav();render();if(useGas){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);if(!syncOk)setTimeout(()=>toast('Sem conexão com o Google — rodando local. Verifique a implantação e o token.'),500);}}
 function buildFilters(){const fr=$('#fResp');fr.innerHTML='<option value="">Todos responsáveis</option>';DB.team.forEach(t=>fr.innerHTML+=`<option value="${esc(t.nome)}">${esc(t.nome)}${t.empresa?' · '+esc(t.empresa):''}</option>`);const fs=$('#fStatus');fs.innerHTML='<option value="">Todos status</option>';STATUS.forEach(s=>fs.innerHTML+=`<option value="${s.id}">${s.name}</option>`);}
 function bindNav(){document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');activeView=b.dataset.v;
