@@ -288,7 +288,7 @@
     </nav>
     <div class="side-foot">
       <button id="syncBtn" class="hide" onclick="syncFromRemote()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9 9 9 0 01-6.7-3M3 12a9 9 0 019-9 9 9 0 016.7 3M21 3v6h-6M3 21v-6h6"/></svg>Sincronizar</button>
-      <button id="Btn" onclick="toggle()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span id="BtnLbl">Visão do </span></button>
+      <button id="gestorBtn" onclick="toggleGestor()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span id="gestorBtnLbl">Visão do gestor</span></button>
       <button onclick="openPeople()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Pessoas & empresas</button>
       <button onclick="exportJSON()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Backup (.json)</button>
       <button class="reset" onclick="resetAll()">Limpar tudo</button>
@@ -331,8 +331,8 @@
    4) Proteja o site publicado (Cloudflare Access / senha do host).
    Sem URL preenchida, o painel funciona localmente (não quebra).
    ================================================================= */
-const GAS_URL='https://script.google.com/macros/s/AKfycbwD0LTQ8GvJaHa2H2XgEW8S0T6skRCc1kC8zF4Zm19U/exec'; // cole aqui a URL .../exec do App da Web
-const GAS_TOKEN='senhaprojetos1!'; // use o MESMO valor no Codigo.gs
+const GAS_URL='https://script.google.com/macros/s/AKfycbwD0LTQ8GvJaHa2H2XgEW8S0T6skRCc1kC8zF4Zm19U/exec';
+const GAS_TOKEN='troque-por-um-segredo'; // use o MESMO valor no TOKEN do Codigo.gs
 const useGas=!!GAS_URL;
 
 const KEY='painel:projetos:v3';
@@ -346,13 +346,13 @@ async function gasGet(){const r=await fetch(GAS_URL+'?t='+Date.now()+'&token='+e
 async function gasPost(body){await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({token:GAS_TOKEN},body))});}
 /* API usada pelo app */
 async function loadData(){
-  if(useGas){try{const db=await gasGet();if(db&&db.error){console.error('Google:',db.error);return memCache;}if(!db||!db.projects||!db.projects.length){if(!db||!(db.team&&db.team.length))return null;}return {projects:db.projects||[],team:db.team||[],empresaInterna:db.empresaInterna,Pin:db.Pin};}catch(e){console.error('Google load:',e);return memCache;}}
+  if(useGas){try{const db=await gasGet();if(db&&db.error){console.error('Google:',db.error);return memCache;}if(!db||!db.projects||!db.projects.length){if(!db||!(db.team&&db.team.length))return null;}return {projects:db.projects||[],team:db.team||[],empresaInterna:db.empresaInterna,gestorPin:db.gestorPin};}catch(e){console.error('Google load:',e);return memCache;}}
   return localGet();
 }
 async function saveAll(d){memCache=d;if(useGas){try{await gasPost({op:'saveAll',data:d});}catch(e){console.error(e);}return;}return localSet(d);}
 async function persistProject(p){memCache=DB;if(useGas){try{await gasPost({op:'upsertProject',project:p});}catch(e){console.error(e);}return;}return localSet(DB);}
 async function persistDelete(idv){memCache=DB;if(useGas){try{await gasPost({op:'deleteProject',id:idv});}catch(e){console.error(e);}return;}return localSet(DB);}
-async function persistSettings(){memCache=DB;if(useGas){try{await gasPost({op:'saveSettings',settings:{team:DB.team,empresaInterna:DB.empresaInterna,Pin:DB.Pin}});}catch(e){console.error(e);}return;}return localSet(DB);}
+async function persistSettings(){memCache=DB;if(useGas){try{await gasPost({op:'saveSettings',settings:{team:DB.team,empresaInterna:DB.empresaInterna,gestorPin:DB.gestorPin}});}catch(e){console.error(e);}return;}return localSet(DB);}
 async function syncFromRemote(silent){if(!useGas)return;if($('#modalMount')&&$('#modalMount').innerHTML.trim())return;try{const d=await loadData();if(d&&d.projects){DB=d;if(DB.team)DB.team=DB.team.map(p=>typeof p==='string'?{nome:p,empresa:''}:p);buildFilters();render();if(!silent)toast('Sincronizado ✓');}}catch(e){}}
 
 /* ===== CONFIG ===== */
@@ -371,7 +371,7 @@ const TYPES=[
 const AVATAR_COLORS=['#ff5436','#2f6fd8','#16a06a','#6d4bd1','#d68a04','#e0392b','#0d9488'];
 
 let DB={projects:[],team:[]};
-let activeView='dash',editingId=null,modalTasks=[],modalLogs=[],statusGroup='urgencia',sortKey='prazo',sortDir=1,On=false;
+let activeView='dash',editingId=null,modalTasks=[],modalLogs=[],statusGroup='urgencia',sortKey='prazo',sortDir=1,gestorOn=false;
 const expandedGantt=new Set();
 
 /* ===== HELPERS ===== */
@@ -447,11 +447,11 @@ function suggestion(p){
 }
 function refreshAuto(){DB.projects.forEach(p=>{p.etapa=autoEtapa(p);p.status=autoStatus(p);});}
 
-/* ===== MODO  (aba Equipe) ===== */
-async function toggle(){
+/* ===== MODO GESTOR (aba Equipe) ===== */
+async function toggleGestor(){
   if(gestorOn){gestorOn=false;applyGestor();if(activeView==='equipe'){document.querySelector('#nav button[data-v="dash"]').click();}toast('Visão do gestor ocultada');return;}
   if(DB.gestorPin){const v=prompt('Código de gestor:');if(v===null)return;if(v!==DB.gestorPin){alert('Código incorreto.');return;}}
-  else{const np=prompt('Senha ('Defina a senha para acessar (Enter vazio = sem código):');if(np===null)return;if(np.trim()){DB.gestorPin=np.trim();await persistSettings();}}
+  else{const np=prompt('Defina um código de gestor para proteger a visão de Equipe (Enter vazio = sem código):');if(np===null)return;if(np.trim()){DB.gestorPin=np.trim();await persistSettings();}}
   gestorOn=true;applyGestor();document.querySelector('#nav button[data-v="equipe"]').click();toast('Visão do gestor ativada');
 }
 function applyGestor(){const nav=$('#navEquipe');if(nav)nav.classList.toggle('hide',!gestorOn);const lbl=$('#gestorBtnLbl');if(lbl)lbl.textContent=gestorOn?'Ocultar visão do gestor':'Visão do gestor';const b=$('#gestorBtn');if(b)b.classList.toggle('on-g',gestorOn);}
