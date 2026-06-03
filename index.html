@@ -451,7 +451,7 @@ function refreshAuto(){DB.projects.forEach(p=>{p.etapa=autoEtapa(p);p.status=aut
 async function toggle(){
   if(gestorOn){gestorOn=false;applyGestor();if(activeView==='equipe'){document.querySelector('#nav button[data-v="dash"]').click();}toast('Visão do gestor ocultada');return;}
   if(DB.gestorPin){const v=prompt('Código de gestor:');if(v===null)return;if(v!==DB.gestorPin){alert('Código incorreto.');return;}}
-  else{const np=prompt('Senha (Defina a senha para acessar (Enter vazio = sem código):');if(np===null)return;if(np.trim()){DB.gestorPin=np.trim();await persistSettings();}}
+  else{const np=prompt('Senha ('Defina a senha para acessar (Enter vazio = sem código):');if(np===null)return;if(np.trim()){DB.gestorPin=np.trim();await persistSettings();}}
   gestorOn=true;applyGestor();document.querySelector('#nav button[data-v="equipe"]').click();toast('Visão do gestor ativada');
 }
 function applyGestor(){const nav=$('#navEquipe');if(nav)nav.classList.toggle('hide',!gestorOn);const lbl=$('#gestorBtnLbl');if(lbl)lbl.textContent=gestorOn?'Ocultar visão do gestor':'Visão do gestor';const b=$('#gestorBtn');if(b)b.classList.toggle('on-g',gestorOn);}
