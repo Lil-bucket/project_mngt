@@ -49,6 +49,11 @@
   .side-foot button:hover{background:var(--accent);color:#fff}
   .side-foot .reset{background:transparent;color:#6f727d;font-size:11.5px}
   .side-foot .reset:hover{background:transparent;color:var(--red)}
+  .side-foot .acct-info{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;background:transparent;color:#8b8e98;font-size:11.5px;font-weight:600;overflow:hidden;cursor:default}
+  .side-foot .acct-info svg{flex-shrink:0;opacity:.75}
+  .side-foot .acct-info span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .side-foot button.logout{background:transparent;color:#d39990}
+  .side-foot button.logout:hover{background:var(--red);color:#fff}
 
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
   .top{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--line);background:var(--paper-2);position:sticky;top:0;z-index:30}
@@ -316,7 +321,8 @@
     </nav>
     <div class="side-foot">
       <button id="syncBtn" class="hide" onclick="syncFromRemote()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9 9 9 0 01-6.7-3M3 12a9 9 0 019-9 9 9 0 016.7 3M21 3v6h-6M3 21v-6h6"/></svg>Sincronizar</button>
-      <button id="acctBtn" class="hide" onclick="acctMenu()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5M21 12H9M12 19a7 7 0 110-14"/></svg><span id="acctLbl">Conta</span></button>
+      <div id="acctInfo" class="acct-info hide" title="Conta conectada"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg><span id="acctLbl">Conta</span></div>
+      <button id="logoutBtn" class="logout hide" onclick="acctMenu()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5M21 12H9M12 19a7 7 0 110-14"/></svg>Sair do painel</button>
       <button onclick="openPeople()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Pessoas & empresas</button>
       <button onclick="exportJSON()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Backup (.json)</button>
       <button class="reset" onclick="resetAll()">Limpar tudo</button>
@@ -356,9 +362,9 @@
    No painel do Supabase: Project Settings > API (URL e chave anon public).
    Em Authentication > Providers, ative o Google. Veja o guia que acompanha o arquivo.
    Sem preencher, o painel roda local (modo de teste), sem login. */
-const SUPABASE_URL='';        // ex.: https://xxxxxxxx.supabase.co
-const SUPABASE_ANON_KEY='';   // chave anon public
-const MANAGER_EMAILS=['voce@suaempresa.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
+const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';        // ex.: https://xxxxxxxx.supabase.co
+const SUPABASE_ANON_KEY='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';   // chave anon public
+const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
 
 const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
 let SB=null,currentUser=null,isManager=false,booted=false;
@@ -396,9 +402,11 @@ async function signOut(){if(useSb&&SB){try{await SB.auth.signOut();}catch(e){}}l
 function showGate(msg){const g=$('#authGate');if(g){g.classList.add('show');if(msg){const e=$('#gateMsg');if(e)e.textContent=msg;}}}
 function hideGate(){const g=$('#authGate');if(g)g.classList.remove('show');}
 async function boot(){
+  let authErr=null;
+  try{const hp=new URLSearchParams((location.hash||'').replace(/^#/,''));const qp=new URLSearchParams(location.search);const e=hp.get('error_description')||qp.get('error_description');if(e){authErr=decodeURIComponent(String(e).replace(/\+/g,' '));history.replaceState(null,'',location.pathname);}}catch(e){}
   if(useSb&&SB){
-    try{const {data}=await SB.auth.getSession();if(data&&data.session&&data.session.user){onSignedIn(data.session.user);}else{showGate();}}
-    catch(e){showGate('Não foi possível conectar ao servidor. Tente novamente.');}
+    try{const {data}=await SB.auth.getSession();if(data&&data.session&&data.session.user){onSignedIn(data.session.user);return;}}catch(e){authErr=authErr||'Não foi possível conectar ao servidor. Tente novamente.';}
+    showGate(authErr);
     SB.auth.onAuthStateChange((ev,sess)=>{if(sess&&sess.user){if(!booted)onSignedIn(sess.user);}else if(ev==='SIGNED_OUT'){booted=false;showGate();}});
   }else{isManager=true;hideGate();init();}
 }
@@ -500,7 +508,8 @@ function refreshAuto(){DB.projects.forEach(p=>{p.etapa=autoEtapa(p);p.status=aut
 function applyRole(){
   const nav=$('#navEquipe');if(nav)nav.classList.toggle('hide',!isManager);
   const lbl=$('#acctLbl');if(lbl)lbl.textContent=(useSb&&currentUser)?(currentUser.email||'Conta'):'Modo local';
-  const acct=$('#acctBtn');if(acct)acct.classList.toggle('hide',!useSb);
+  const acctInfo=$('#acctInfo');if(acctInfo)acctInfo.classList.toggle('hide',!useSb);
+  const logout=$('#logoutBtn');if(logout)logout.classList.toggle('hide',!useSb);
   // dashboard inicial por pessoa: membro começa vendo os "seus" projetos (mapeado pelo e-mail)
   if(useSb&&currentUser&&!isManager){
     const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
