@@ -357,14 +357,14 @@
    Em Authentication > Providers, ative o Google. Veja o guia que acompanha o arquivo.
    Sem preencher, o painel roda local (modo de teste), sem login. */
 const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';        // ex.: https://xxxxxxxx.supabase.co
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkZm9jbmNsd3VubnNrem5yaGphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjI3MTMsImV4cCI6MjA5NjI5ODcxM30.pK-sc84ss9zY1ZEwQ7_8woZjJoa9LCS6-IJJPEV4uH8';   // chave anon public
-const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
-
-const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
-let SB=null,currentUser=null,isManager=false,booted=false;
-if(useSb){try{SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init:',e);}}
-
-const KEY='painel:projetos:v3';
+  const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';   // chave anon public
+  const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
+  
+  const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
+  let SB=null,currentUser=null,isManager=false,booted=false;
+  if(useSb){try{SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init:',e);}}
+  
+  const KEY='painel:projetos:v3';
 const hasStore=typeof window!=='undefined'&&window.storage&&typeof window.storage.get==='function';
 let memCache=null;
 /* camada local (modo de teste): Claude artifact -> localStorage -> memória */
