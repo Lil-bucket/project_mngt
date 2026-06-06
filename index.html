@@ -356,15 +356,15 @@
    No painel do Supabase: Project Settings > API (URL e chave anon public).
    Em Authentication > Providers, ative o Google. Veja o guia que acompanha o arquivo.
    Sem preencher, o painel roda local (modo de teste), sem login. */
-const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';        // ex.: https://xxxxxxxx.supabase.co
-  const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';   // chave anon public
-  const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
-  
-  const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
-  let SB=null,currentUser=null,isManager=false,booted=false;
-  if(useSb){try{SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init:',e);}}
-  
-  const KEY='painel:projetos:v3';
+const SUPABASE_URL='';        // ex.: https://xxxxxxxx.supabase.co
+const SUPABASE_ANON_KEY='';   // chave anon public
+const MANAGER_EMAILS=['voce@suaempresa.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
+
+const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
+let SB=null,currentUser=null,isManager=false,booted=false;
+if(useSb){try{SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init:',e);}}
+
+const KEY='painel:projetos:v3';
 const hasStore=typeof window!=='undefined'&&window.storage&&typeof window.storage.get==='function';
 let memCache=null;
 /* camada local (modo de teste): Claude artifact -> localStorage -> memória */
@@ -391,7 +391,7 @@ async function persistSettings(){memCache=DB;if(useSb&&SB){try{await SB.from('co
 async function syncFromRemote(silent){if(!useSb||!SB)return;if($('#modalMount')&&$('#modalMount').innerHTML.trim())return;try{const d=await loadData();if(d&&d.projects){DB=d;normTeam();buildFilters();render();if(!silent)toast('Sincronizado ✓');}}catch(e){}}
 
 /* LOGIN */
-async function signInGoogle(){if(!useSb||!SB)return;await SB.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0].split('?')[0]}});}
+async function signInGoogle(){if(!useSb||!SB)return;await SB.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.href.split('#')[0].split('?')[0],queryParams:{apikey:SUPABASE_ANON_KEY}}});}
 async function signOut(){if(useSb&&SB){try{await SB.auth.signOut();}catch(e){}}location.reload();}
 function showGate(msg){const g=$('#authGate');if(g){g.classList.add('show');if(msg){const e=$('#gateMsg');if(e)e.textContent=msg;}}}
 function hideGate(){const g=$('#authGate');if(g)g.classList.remove('show');}
