@@ -363,7 +363,7 @@
    Em Authentication > Providers, ative o Google. Veja o guia que acompanha o arquivo.
    Sem preencher, o painel roda local (modo de teste), sem login. */
 const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';        // ex.: https://xxxxxxxx.supabase.co
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkZm9jbmNsd3VubnNrem5yaGphIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDcyMjcxMywiZXhwIjoyMDk2Mjk4NzEzfQ._37bLCd2yuFw6I0s88GGGNp6I6g0FCQCiBO3rYcfOIU';   // chave anon public
+const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';   // chave anon public
 const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
 
 const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
@@ -417,15 +417,9 @@ async function boot(){
     if(e){authErr=decodeURIComponent(String(e).replace(/\+/g,' '));console.error('[auth] erro na URL:',authErr);}
   }catch(e){}
 
-  /* 2) Ouve TODOS os eventos de auth e registra no console p/ diagnóstico.
-        Se "o painel pisca e volta", veja aqui qual evento dispara logo após o SIGNED_IN. */
-  SB.auth.onAuthStateChange((ev,sess)=>{
-    console.log('[auth] evento:',ev,'| sessão?',!!(sess&&sess.user),'|',(sess&&sess.user&&sess.user.email)||'');
-    if(sess&&sess.user){if(!booted)onSignedIn(sess.user);}
-    else if(ev==='SIGNED_OUT'){booted=false;showGate('Sua sessão foi encerrada pelo servidor. Veja o console (F12) para o motivo e tente novamente.');}
-  });
-
-  /* 3) Sessão já existente (ou recém-criada pelo redirect do Google) */
+  /* 2) Sessão já existente (ou recém-criada pelo redirect do Google).
+        IMPORTANTE: o getSession() roda ANTES de registrar o listener,
+        senão a lib do Supabase pode travar (deadlock) e a tela fica em branco. */
   try{
     const {data,error}=await SB.auth.getSession();
     if(error)console.error('[auth] getSession:',error);
@@ -433,6 +427,15 @@ async function boot(){
   }catch(e){console.error('[auth] getSession (exceção):',e);authErr=authErr||'Não foi possível conectar ao servidor.';}
 
   showGate(authErr);
+
+  /* 3) Ouve os eventos de auth e registra no console p/ diagnóstico.
+        Se "o painel pisca e volta", veja aqui qual evento dispara após o SIGNED_IN.
+        onSignedIn é adiado (setTimeout 0) — recomendação do Supabase p/ não travar o callback. */
+  SB.auth.onAuthStateChange((ev,sess)=>{
+    console.log('[auth] evento:',ev,'| sessão?',!!(sess&&sess.user),'|',(sess&&sess.user&&sess.user.email)||'');
+    if(sess&&sess.user){if(!booted)setTimeout(()=>onSignedIn(sess.user),0);}
+    else if(ev==='SIGNED_OUT'){booted=false;showGate('Sua sessão foi encerrada pelo servidor. Veja o console (F12) para o motivo e tente novamente.');}
+  });
 }
 async function onSignedIn(user){
   if(booted)return;booted=true;currentUser=user;
