@@ -54,6 +54,29 @@
   .side-foot .acct-info span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .side-foot button.logout{background:transparent;color:#d39990}
   .side-foot button.logout:hover{background:var(--red);color:#fff}
+  /* Minhas atividades (pessoais) */
+  .myact-add{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .myact-add input[type=text],.myact-add input:not([type]){flex:1;min-width:180px}
+  .myact-add input{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 11px;font:inherit;font-size:13px;outline:none}
+  .myact-add input:focus{border-color:var(--accent)}
+  .myact-add input[type=date]{max-width:150px;color:var(--txt-2)}
+  .myact-add button{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 15px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .myact-add button:hover{filter:brightness(1.08)}
+  .myact-row{display:flex;align-items:center;gap:11px;padding:10px 4px;border-bottom:1px solid var(--line)}
+  .myact-row:last-child{border-bottom:none}
+  .myact-chk{position:relative;flex-shrink:0;width:19px;height:19px;cursor:pointer}
+  .myact-chk input{position:absolute;opacity:0;width:0;height:0}
+  .myact-chk span{display:block;width:19px;height:19px;border:2px solid var(--line);border-radius:6px;transition:.15s}
+  .myact-chk input:checked+span{background:var(--green);border-color:var(--green)}
+  .myact-chk input:checked+span::after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .myact-ttl{flex:1;font-size:13.5px;color:var(--txt);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .myact-row.is-done .myact-ttl{text-decoration:line-through;color:var(--txt-2);opacity:.7}
+  .myact-due{flex-shrink:0;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(120,120,130,.14);color:var(--txt-2)}
+  .myact-due.soon{background:rgba(217,160,30,.16);color:var(--amber)}
+  .myact-due.late{background:rgba(214,69,69,.16);color:var(--red)}
+  .myact-due.done{background:rgba(120,120,130,.12);color:var(--txt-2)}
+  .myact-del{flex-shrink:0;background:transparent;border:none;color:var(--txt-2);font-size:14px;cursor:pointer;padding:4px 7px;border-radius:6px;line-height:1}
+  .myact-del:hover{background:var(--red);color:#fff}
 
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
   .top{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--line);background:var(--paper-2);position:sticky;top:0;z-index:30}
@@ -363,7 +386,7 @@
    Em Authentication > Providers, ative o Google. Veja o guia que acompanha o arquivo.
    Sem preencher, o painel roda local (modo de teste), sem login. */
 const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';        // ex.: https://xxxxxxxx.supabase.co
-const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';   // chave anon public
+const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';   // chave anon public (publishable)
 const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
 
 const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
@@ -463,6 +486,7 @@ const AVATAR_COLORS=['#ff5436','#2f6fd8','#16a06a','#6d4bd1','#d68a04','#e0392b'
 
 let DB={projects:[],team:[]};
 let activeView='dash',editingId=null,modalTasks=[],modalLogs=[],statusGroup='urgencia',sortKey='prazo',sortDir=1,gestorOn=false;
+let myActs=[];const MYKEY=KEY+'::me';
 const expandedGantt=new Set();
 
 /* ===== HELPERS ===== */
@@ -555,7 +579,7 @@ async function acctMenu(){if(!useSb)return;if(confirm('Sair da conta '+((current
 function filtered(){const r=$('#fResp').value,s=$('#fStatus').value;return DB.projects.filter(p=>(!r||p.resp===r)&&(!s||p.status===s));}
 
 /* ===== INIT ===== */
-async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;normTeam();if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}buildFilters();bindNav();render();applyRole();if(useSb){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);}}
+async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;normTeam();if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}try{myActs=await loadMyActs();}catch(e){console.error('[minhas-ativ] load inicial:',e);}buildFilters();bindNav();render();applyRole();if(useSb){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);}}
 function buildFilters(){const fr=$('#fResp');fr.innerHTML='<option value="">Todos responsáveis</option>';DB.team.forEach(t=>fr.innerHTML+=`<option value="${esc(t.nome)}">${esc(t.nome)}${t.empresa?' · '+esc(t.empresa):''}</option>`);const fs=$('#fStatus');fs.innerHTML='<option value="">Todos status</option>';STATUS.forEach(s=>fs.innerHTML+=`<option value="${s.id}">${s.name}</option>`);}
 function bindNav(){document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');activeView=b.dataset.v;
@@ -589,6 +613,59 @@ function seed(){
 }
 
 /* ===== DASHBOARD ===== */
+/* ===== MINHAS ATIVIDADES (pessoais, privadas por perfil) =====
+   No Supabase ficam na tabela "atividades" (1 linha por usuário, RLS por auth.uid()),
+   então só o próprio dono lê/grava — nem pela API alguém vê as do outro.
+   Sem Supabase (modo local), ficam só neste navegador. */
+async function loadMyActs(){
+  if(useSb&&SB&&currentUser){
+    try{
+      const {data,error}=await SB.from('atividades').select('data').eq('user_id',currentUser.id).maybeSingle();
+      if(error){console.error('[minhas-ativ] load:',error);return [];}
+      return (data&&Array.isArray(data.data))?data.data:[];
+    }catch(e){console.error('[minhas-ativ] load (exceção):',e);return [];}
+  }
+  if(hasStore){try{const r=await window.storage.get(MYKEY);return r&&r.value?JSON.parse(r.value):[];}catch(e){return [];}}
+  try{const v=localStorage.getItem(MYKEY);return v?JSON.parse(v):[];}catch(e){return [];}
+}
+async function saveMyActs(){
+  if(useSb&&SB&&currentUser){
+    try{const {error}=await SB.from('atividades').upsert({user_id:currentUser.id,data:myActs,updated_at:new Date().toISOString()});if(error)console.error('[minhas-ativ] save:',error);}catch(e){console.error('[minhas-ativ] save (exceção):',e);}
+    return;
+  }
+  if(hasStore){try{await window.storage.set(MYKEY,JSON.stringify(myActs));}catch(e){}return;}
+  try{localStorage.setItem(MYKEY,JSON.stringify(myActs));}catch(e){}
+}
+function addMyAct(){
+  const inp=$('#myActInput');if(!inp)return;const t=inp.value.trim();if(!t)return;
+  const dt=$('#myActDate')?$('#myActDate').value:'';
+  myActs.push({id:id(),titulo:t,prazo:dt||'',feito:false,criadoEm:new Date().toISOString().slice(0,10)});
+  saveMyActs();renderDash();const ni=$('#myActInput');if(ni)ni.focus();
+}
+function toggleMyAct(i){const t=myActs.find(x=>x.id===i);if(!t)return;t.feito=!t.feito;saveMyActs();renderDash();}
+function delMyAct(i){myActs=myActs.filter(x=>x.id!==i);saveMyActs();renderDash();}
+function myActsHTML(){
+  const items=myActs.slice().sort((a,b)=>{
+    if(!!a.feito!==!!b.feito)return a.feito?1:-1;
+    return ((a.prazo||'9999-99')>(b.prazo||'9999-99'))?1:-1;
+  });
+  if(!items.length)return '<div class="empty">Você ainda não tem atividades pessoais. Adicione uma acima — só você as vê.</div>';
+  return items.map(t=>{
+    const d=daysTo(t.prazo);
+    let cls='',label='';
+    if(t.prazo){
+      cls=t.feito?'done':(d<0?'late':(d<=2?'soon':''));
+      label=(d<0?'atrasada '+Math.abs(d)+'d':(d===0?'hoje':(d===1?'amanhã':'em '+d+'d')))+' · '+fmtDate(t.prazo);
+    }
+    return `<div class="myact-row ${t.feito?'is-done':''}">
+      <label class="myact-chk"><input type="checkbox" ${t.feito?'checked':''} onchange="toggleMyAct('${t.id}')"><span></span></label>
+      <div class="myact-ttl" title="${esc(t.titulo)}">${esc(t.titulo)}</div>
+      ${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:''}
+      <button class="myact-del" onclick="delMyAct('${t.id}')" title="Remover">✕</button>
+    </div>`;
+  }).join('');
+}
+
 function renderDash(){
   const list=filtered();const active=list.filter(p=>p.status!=='concluido');
   const c={total:active.length,no_prazo:list.filter(p=>p.status==='no_prazo').length,atencao:list.filter(p=>p.status==='atencao').length,atrasado:list.filter(p=>p.status==='atrasado').length,bloqueado:list.filter(p=>p.status==='bloqueado').length,concluido:list.filter(p=>p.status==='concluido').length};
@@ -611,6 +688,17 @@ function renderDash(){
            <div class="body"><div class="pname">${esc(p.nome)}</div><div class="pact" style="display:flex;align-items:center;gap:7px;margin-top:4px"><span class="mono" style="font-size:11px;color:var(--txt-2)">${computeProg(p)}%</span>${h?`<span class="chip-h ${h.ok?'ok':'bad'}">${h.ok?'no ritmo':'atrás '+h.gap+'%'}</span>`:''}</div></div>
            <div class="rt"><div class="deadline ${di.cls}">${di.txt}</div><div class="dl-sub">${di.sub}</div></div></div>`;
          }).join(''):'<div class="empty">Nenhum prazo próximo.</div>'}</div></div>
+   </div>
+   <div class="panel" style="margin-top:18px">
+     <div class="panel-h"><h3>📌 Minhas atividades</h3><span class="tag">privado · só você vê</span></div>
+     <div class="panel-b">
+       <div class="myact-add">
+         <input id="myActInput" type="text" placeholder="Nova atividade pessoal..." onkeydown="if(event.key==='Enter')addMyAct()">
+         <input id="myActDate" type="date" title="Prazo (opcional)">
+         <button onclick="addMyAct()">Adicionar</button>
+       </div>
+       <div id="myActList">${myActsHTML()}</div>
+     </div>
    </div>`;
 }
 
