@@ -77,6 +77,39 @@
   .myact-due.done{background:rgba(120,120,130,.12);color:var(--txt-2)}
   .myact-del{flex-shrink:0;background:transparent;border:none;color:var(--txt-2);font-size:14px;cursor:pointer;padding:4px 7px;border-radius:6px;line-height:1}
   .myact-del:hover{background:var(--red);color:#fff}
+  .myact-main{flex:1;min-width:0}
+  .myact-main .myact-ttl{flex:none}
+  .myact-desc{font-size:11.5px;color:var(--txt-2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .myact-ed{flex-shrink:0;background:transparent;border:none;color:var(--txt-2);font-size:13px;cursor:pointer;padding:4px 7px;border-radius:6px;line-height:1}
+  .myact-ed:hover{background:var(--accent);color:#fff}
+  /* Tela Atividades (gestão completa) */
+  .atv-add{display:flex;flex-direction:column;gap:9px}
+  .atv-add input[type=text],.atv-add textarea{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;width:100%;box-sizing:border-box}
+  .atv-add textarea{resize:vertical;min-height:44px;line-height:1.45}
+  .atv-add input:focus,.atv-add textarea:focus{border-color:var(--accent)}
+  .atv-add-foot,.atv-edit-foot{display:flex;align-items:center;gap:9px}
+  .atv-add-foot input[type=date],.atv-edit-foot input[type=date]{background:var(--card);border:1px solid var(--line);color:var(--txt-2);border-radius:9px;padding:8px 11px;font:inherit;font-size:13px;outline:none}
+  .sp{flex:1}
+  .btn-acc{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 16px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .btn-acc:hover{filter:brightness(1.08)}
+  .btn-ghost{background:transparent;color:var(--txt-2);border:1px solid var(--line);border-radius:9px;padding:9px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  .btn-ghost:hover{background:var(--line)}
+  .atv-row{display:flex;align-items:flex-start;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line)}
+  .atv-row:last-child{border-bottom:none}
+  .atv-row .myact-chk{margin-top:1px}
+  .atv-main{flex:1;min-width:0}
+  .atv-ttl{font-size:14px;font-weight:600;color:var(--txt);word-break:break-word}
+  .atv-row.is-done .atv-ttl{text-decoration:line-through;color:var(--txt-2);opacity:.7}
+  .atv-desc{font-size:12.5px;color:var(--txt-2);margin-top:3px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  .atv-meta{display:flex;align-items:center;gap:9px;margin-top:7px;flex-wrap:wrap}
+  .atv-nodate{font-size:11px;color:var(--txt-3);font-weight:500}
+  .atv-created{font-size:11px;color:var(--txt-3)}
+  .atv-btn{flex-shrink:0;background:transparent;border:1px solid var(--line);color:var(--txt-2);font-size:12px;font-weight:600;cursor:pointer;padding:6px 11px;border-radius:8px;line-height:1;white-space:nowrap}
+  .atv-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .atv-row.editing{padding:6px 0}
+  .atv-edit{flex:1;display:flex;flex-direction:column;gap:9px;background:var(--card);border:1px solid var(--accent);border-radius:11px;padding:13px}
+  .atv-edit input[type=text],.atv-edit textarea{background:var(--paper-2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 11px;font:inherit;font-size:13.5px;outline:none;width:100%;box-sizing:border-box}
+  .atv-edit textarea{resize:vertical;min-height:40px;line-height:1.45}
 
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
   .top{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--line);background:var(--paper-2);position:sticky;top:0;z-index:30}
@@ -341,6 +374,7 @@
       <button data-v="gantt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h9M4 12h13M4 18h7" stroke-linecap="round"/></svg>Cronograma</button>
       <button data-v="equipe" id="navEquipe" class="hide"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Equipe</button>
       <button data-v="status"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Status Semanal</button>
+      <button data-v="atividades"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11" stroke-linecap="round"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" stroke-linecap="round"/></svg>Atividades</button>
     </nav>
     <div class="side-foot">
       <button id="syncBtn" class="hide" onclick="syncFromRemote()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9 9 9 0 01-6.7-3M3 12a9 9 0 019-9 9 9 0 016.7 3M21 3v6h-6M3 21v-6h6"/></svg>Sincronizar</button>
@@ -372,6 +406,7 @@
     <section class="view hide" id="view-gantt"></section>
     <section class="view hide" id="view-equipe"></section>
     <section class="view hide" id="view-status"></section>
+    <section class="view hide" id="view-atividades"></section>
   </main>
 </div>
 <div class="scrim" id="scrim" onclick="closeSidebar()"></div>
@@ -486,7 +521,7 @@ const AVATAR_COLORS=['#ff5436','#2f6fd8','#16a06a','#6d4bd1','#d68a04','#e0392b'
 
 let DB={projects:[],team:[]};
 let activeView='dash',editingId=null,modalTasks=[],modalLogs=[],statusGroup='urgencia',sortKey='prazo',sortDir=1,gestorOn=false;
-let myActs=[];const MYKEY=KEY+'::me';
+let myActs=[];const MYKEY=KEY+'::me';let editAtvId=null;
 const expandedGantt=new Set();
 
 /* ===== HELPERS ===== */
@@ -584,11 +619,11 @@ function buildFilters(){const fr=$('#fResp');fr.innerHTML='<option value="">Todo
 function bindNav(){document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');activeView=b.dataset.v;
   document.querySelectorAll('.view').forEach(v=>v.classList.add('hide'));$('#view-'+activeView).classList.remove('hide');
-  const T={dash:['Dashboard Executivo','Visão geral do portfólio do time'],kanban:['Quadro de Etapas','Em que estágio está cada projeto'],table:['Lista de Projetos','Projetos, responsáveis, prazos e status atual'],gantt:['Cronograma','Linha do tempo — clique no projeto para abrir as atividades'],equipe:['Equipe — Volume de Trabalho','Carga de cada pessoa do time'],status:['Status Semanal','Resumo objetivo pronto para compartilhar']};
+  const T={dash:['Dashboard Executivo','Visão geral do portfólio do time'],kanban:['Quadro de Etapas','Em que estágio está cada projeto'],table:['Lista de Projetos','Projetos, responsáveis, prazos e status atual'],gantt:['Cronograma','Linha do tempo — clique no projeto para abrir as atividades'],equipe:['Equipe — Volume de Trabalho','Carga de cada pessoa do time'],status:['Status Semanal','Resumo objetivo pronto para compartilhar'],atividades:['Minhas atividades','Suas tarefas pessoais — privado, só você vê']};
   $('#vTitle').textContent=T[activeView][0];$('#vSub').textContent=T[activeView][1];closeSidebar();render();});}
 function toggleSidebar(){const s=document.querySelector('.side'),sc=$('#scrim');const open=s.classList.toggle('open');if(sc)sc.classList.toggle('show',open);}
 function closeSidebar(){const s=document.querySelector('.side'),sc=$('#scrim');if(s)s.classList.remove('open');if(sc)sc.classList.remove('show');}
-function render(){refreshAuto();({dash:renderDash,kanban:renderKanban,table:renderTable,gantt:renderGantt,equipe:renderEquipe,status:renderStatus}[activeView])();}
+function render(){refreshAuto();({dash:renderDash,kanban:renderKanban,table:renderTable,gantt:renderGantt,equipe:renderEquipe,status:renderStatus,atividades:renderAtividades}[activeView])();}
 
 /* ===== SEED ===== */
 function seed(){
@@ -636,34 +671,93 @@ async function saveMyActs(){
   if(hasStore){try{await window.storage.set(MYKEY,JSON.stringify(myActs));}catch(e){}return;}
   try{localStorage.setItem(MYKEY,JSON.stringify(myActs));}catch(e){}
 }
+function refreshActs(){const a=$('#atvList');if(a)a.innerHTML=atvListHTML();const m=$('#myActList');if(m)m.innerHTML=myActsHTML();}
+function goView(v){const b=document.querySelector('#nav button[data-v="'+v+'"]');if(b)b.click();}
 function addMyAct(){
   const inp=$('#myActInput');if(!inp)return;const t=inp.value.trim();if(!t)return;
   const dt=$('#myActDate')?$('#myActDate').value:'';
-  myActs.push({id:id(),titulo:t,prazo:dt||'',feito:false,criadoEm:new Date().toISOString().slice(0,10)});
-  saveMyActs();renderDash();const ni=$('#myActInput');if(ni)ni.focus();
+  myActs.push({id:id(),titulo:t,desc:'',prazo:dt||'',feito:false,criadoEm:new Date().toISOString().slice(0,10)});
+  inp.value='';if($('#myActDate'))$('#myActDate').value='';
+  saveMyActs();refreshActs();inp.focus();
 }
-function toggleMyAct(i){const t=myActs.find(x=>x.id===i);if(!t)return;t.feito=!t.feito;saveMyActs();renderDash();}
-function delMyAct(i){myActs=myActs.filter(x=>x.id!==i);saveMyActs();renderDash();}
+function addAtv(){
+  const it=$('#atvTitulo');if(!it)return;const t=it.value.trim();if(!t){it.focus();return;}
+  const d=$('#atvDesc')?$('#atvDesc').value.trim():'';
+  const dt=$('#atvPrazo')?$('#atvPrazo').value:'';
+  myActs.push({id:id(),titulo:t,desc:d,prazo:dt||'',feito:false,criadoEm:new Date().toISOString().slice(0,10)});
+  it.value='';if($('#atvDesc'))$('#atvDesc').value='';if($('#atvPrazo'))$('#atvPrazo').value='';
+  saveMyActs();refreshActs();it.focus();
+}
+function toggleMyAct(i){const t=myActs.find(x=>x.id===i);if(!t)return;t.feito=!t.feito;saveMyActs();refreshActs();}
+function delMyAct(i){if(!confirm('Remover esta atividade?'))return;myActs=myActs.filter(x=>x.id!==i);if(editAtvId===i)editAtvId=null;saveMyActs();refreshActs();}
+function startEditAtv(i){editAtvId=i;if(activeView!=='atividades')goView('atividades');else refreshActs();const f=$('#edAtvTitulo');if(f){f.focus();f.select();}}
+function cancelEditAtv(){editAtvId=null;refreshActs();}
+function saveEditAtv(){
+  const t=myActs.find(x=>x.id===editAtvId);if(!t){editAtvId=null;refreshActs();return;}
+  const nt=$('#edAtvTitulo')?$('#edAtvTitulo').value.trim():'';if(!nt){if($('#edAtvTitulo'))$('#edAtvTitulo').focus();return;}
+  t.titulo=nt;t.desc=$('#edAtvDesc')?$('#edAtvDesc').value.trim():'';t.prazo=$('#edAtvPrazo')?$('#edAtvPrazo').value:'';
+  editAtvId=null;saveMyActs();refreshActs();
+}
+function actDue(t){const d=daysTo(t.prazo);let cls='',label='';if(t.prazo){cls=t.feito?'done':(d<0?'late':(d<=2?'soon':''));label=(d<0?'atrasada '+Math.abs(d)+'d':(d===0?'hoje':(d===1?'amanhã':'em '+d+'d')))+' · '+fmtDate(t.prazo);}return{cls,label};}
+function actsSorted(){return myActs.slice().sort((a,b)=>{if(!!a.feito!==!!b.feito)return a.feito?1:-1;return ((a.prazo||'9999-99')>(b.prazo||'9999-99'))?1:-1;});}
 function myActsHTML(){
-  const items=myActs.slice().sort((a,b)=>{
-    if(!!a.feito!==!!b.feito)return a.feito?1:-1;
-    return ((a.prazo||'9999-99')>(b.prazo||'9999-99'))?1:-1;
-  });
+  const items=actsSorted();
   if(!items.length)return '<div class="empty">Você ainda não tem atividades pessoais. Adicione uma acima — só você as vê.</div>';
-  return items.map(t=>{
-    const d=daysTo(t.prazo);
-    let cls='',label='';
-    if(t.prazo){
-      cls=t.feito?'done':(d<0?'late':(d<=2?'soon':''));
-      label=(d<0?'atrasada '+Math.abs(d)+'d':(d===0?'hoje':(d===1?'amanhã':'em '+d+'d')))+' · '+fmtDate(t.prazo);
-    }
+  return items.map(t=>{const {cls,label}=actDue(t);
     return `<div class="myact-row ${t.feito?'is-done':''}">
       <label class="myact-chk"><input type="checkbox" ${t.feito?'checked':''} onchange="toggleMyAct('${t.id}')"><span></span></label>
-      <div class="myact-ttl" title="${esc(t.titulo)}">${esc(t.titulo)}</div>
+      <div class="myact-main"><div class="myact-ttl" title="${esc(t.titulo)}">${esc(t.titulo)}</div>${t.desc?`<div class="myact-desc" title="${esc(t.desc)}">${esc(t.desc)}</div>`:''}</div>
       ${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:''}
+      <button class="myact-ed" onclick="startEditAtv('${t.id}')" title="Editar">✎</button>
       <button class="myact-del" onclick="delMyAct('${t.id}')" title="Remover">✕</button>
     </div>`;
   }).join('');
+}
+function atvListHTML(){
+  const items=actsSorted();
+  if(!items.length)return '<div class="empty">Nenhuma atividade ainda. Crie a primeira acima — só você as vê.</div>';
+  return items.map(t=>{
+    if(editAtvId===t.id){
+      return `<div class="atv-row editing"><div class="atv-edit">
+        <input id="edAtvTitulo" type="text" value="${esc(t.titulo)}" placeholder="Título da atividade">
+        <textarea id="edAtvDesc" rows="2" placeholder="Descrição (opcional)">${esc(t.desc||'')}</textarea>
+        <div class="atv-edit-foot"><input id="edAtvPrazo" type="date" value="${t.prazo||''}"><div class="sp"></div>
+          <button class="btn-ghost" onclick="cancelEditAtv()">Cancelar</button>
+          <button class="btn-acc" onclick="saveEditAtv()">Salvar</button></div>
+      </div></div>`;
+    }
+    const {cls,label}=actDue(t);
+    return `<div class="atv-row ${t.feito?'is-done':''}">
+      <label class="myact-chk"><input type="checkbox" ${t.feito?'checked':''} onchange="toggleMyAct('${t.id}')"><span></span></label>
+      <div class="atv-main">
+        <div class="atv-ttl">${esc(t.titulo)}</div>
+        ${t.desc?`<div class="atv-desc">${esc(t.desc)}</div>`:''}
+        <div class="atv-meta">${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:'<span class="atv-nodate">sem prazo</span>'}${t.criadoEm?`<span class="atv-created">criada ${fmtDate(t.criadoEm)}</span>`:''}</div>
+      </div>
+      <button class="atv-btn" onclick="startEditAtv('${t.id}')">✎ Editar</button>
+      <button class="myact-del" onclick="delMyAct('${t.id}')" title="Remover">✕</button>
+    </div>`;
+  }).join('');
+}
+function renderAtividades(){
+  const el=$('#view-atividades');if(!el)return;
+  const total=myActs.length,abertas=myActs.filter(a=>!a.feito).length,feitas=total-abertas;
+  el.innerHTML=`
+   <div class="panel">
+     <div class="panel-h"><h3>📌 Nova atividade</h3><span class="tag">privado · só você vê</span></div>
+     <div class="panel-b">
+       <div class="atv-add">
+         <input id="atvTitulo" type="text" placeholder="Título da atividade" onkeydown="if(event.key==='Enter')addAtv()">
+         <textarea id="atvDesc" rows="2" placeholder="Descrição (opcional) — detalhes, contexto, links..."></textarea>
+         <div class="atv-add-foot"><input id="atvPrazo" type="date" title="Prazo (opcional)"><div class="sp"></div>
+           <button class="btn-acc" onclick="addAtv()">Adicionar atividade</button></div>
+       </div>
+     </div>
+   </div>
+   <div class="panel" style="margin-top:16px">
+     <div class="panel-h"><h3>Suas atividades</h3><span class="tag">${abertas} aberta(s) · ${feitas} concluída(s)</span></div>
+     <div class="panel-b"><div id="atvList">${atvListHTML()}</div></div>
+   </div>`;
 }
 
 function renderDash(){
