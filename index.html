@@ -1093,12 +1093,12 @@ function renderPeopleModal(){
   const rows=peopleDraft.length?peopleDraft.map((p,i)=>`<div class="person-row">
       <input class="pr-name" value="${esc(p.nome)}" oninput="peopleDraft[${i}].nome=this.value" placeholder="Nome da pessoa">
       <input class="pr-emp" list="empresasDL" value="${esc(p.empresa||'')}" oninput="peopleDraft[${i}].empresa=this.value" placeholder="Empresa / classificação">
-      <input class="pr-mail" value="${esc(p.email||'')}" oninput="peopleDraft[${i}].email=this.value" placeholder="E-mail do login (Google)">
+      <input class="pr-mail" value="${esc(p.email||'')}" oninput="peopleDraft[${i}].email=this.value" placeholder="E-mail corporativo (login e status diário)">
       <button class="t-del" onclick="removePerson(${i})" title="Remover">✕</button></div>`).join(''):'<div class="td-sub" style="padding:8px 2px">Nenhuma pessoa cadastrada ainda.</div>';
   $('#modalMount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:560px">
     <div class="modal-h"><h3>Pessoas & empresas</h3><button class="x" onclick="closeModal()">✕</button></div>
     <div class="modal-b">${dl}
-      <div style="font-size:12.5px;color:var(--txt-2);margin-bottom:16px;line-height:1.5">Cadastre todos os envolvidos — equipe interna, agências e parceiros — e classifique cada um pela <b>empresa</b>. Eles ficam disponíveis como responsáveis nos projetos e atividades, agrupados por empresa, e alimentam a visão de carga da Equipe.</div>
+      <div style="font-size:12.5px;color:var(--txt-2);margin-bottom:16px;line-height:1.5">Cadastre todos os envolvidos — equipe interna, agências e parceiros — e classifique cada um pela <b>empresa</b>. Eles ficam disponíveis como responsáveis nos projetos e atividades, agrupados por empresa, e alimentam a visão de carga da Equipe.<br><b>O e-mail precisa ser o corporativo</b> usado no login — é por ele que cada pessoa recebe o status diário e que o painel identifica quem está logado.</div>
       <div class="field" style="margin-bottom:18px"><label>Nossa empresa (interna) — tudo fora dela conta como agência/área externa</label><input id="pp_interna" list="empresasDL" value="${esc(DB.empresaInterna||'')}" placeholder="Ex.: TCL"></div>
       <div class="people-list">${rows}</div>
       <button class="mini-btn dark" style="margin-top:6px" onclick="addPerson()">+ Adicionar pessoa</button>
