@@ -355,8 +355,9 @@
   .auth-btn:hover{background:var(--accent)}
   .auth-btn.full{width:100%;justify-content:center;margin-top:4px}
   .auth-btn:disabled{opacity:.6;cursor:default}
-  .auth-inp{width:100%;box-sizing:border-box;background:var(--ink);border:1px solid var(--line);color:var(--txt);border-radius:11px;padding:12px 14px;font:inherit;font-size:14px;margin-bottom:10px;outline:none}
-  .auth-inp:focus{border-color:var(--accent)}
+  .auth-inp{width:100%;box-sizing:border-box;background:var(--paper);border:1px solid var(--line);color:var(--txt);border-radius:11px;padding:12px 14px;font:inherit;font-size:14px;margin-bottom:10px;outline:none}
+  .auth-inp::placeholder{color:var(--txt-3)}
+  .auth-inp:focus{border-color:var(--accent);background:#fff}
   .auth-links{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
   .auth-links a{color:var(--txt-2);font-size:12.5px;cursor:pointer;text-decoration:none}
   .auth-links a:hover{color:var(--accent)}
@@ -444,7 +445,7 @@
    Sem preencher, o painel roda local (modo de teste), sem login. */
 const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';        // ex.: https://xxxxxxxx.supabase.co
 const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';   // chave anon public (publishable)
-const MANAGER_EMAILS=['lucas.baldim@tclsemp.com.br']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
+const MANAGER_EMAILS=['baldim.lucas@gmail.com']; // e-mails com VISÃO DE GESTOR (separe por vírgula)
 
 const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
 let SB=null,currentUser=null,isManager=false,booted=false;
