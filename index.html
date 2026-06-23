@@ -240,11 +240,11 @@
   .rep-item .ri-main{flex:1}.rep-item .ri-t{font-weight:600;font-size:13.5px}
   .rep-item .ri-d{font-size:12.5px;color:var(--txt-2);margin-top:3px;line-height:1.5}.rep-item .ri-d b{color:var(--txt);font-weight:600}
   .overlay{position:fixed;inset:0;background:rgba(20,22,28,.45);backdrop-filter:blur(3px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
-  .modal{background:var(--card);border-radius:18px;width:100%;max-width:680px;box-shadow:var(--shadow-lg);animation:pop .22s cubic-bezier(.2,.9,.3,1.2)}
+  .modal{background:var(--card);border-radius:18px;width:100%;max-width:min(96vw,1100px);box-shadow:var(--shadow-lg);animation:pop .22s cubic-bezier(.2,.9,.3,1.2)}
   @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
   .modal-h{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
   .modal-h h3{font-size:17px}.modal-h .x{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--txt-3);transition:.15s}.modal-h .x:hover{background:var(--paper);color:var(--txt)}
-  .modal-b{padding:22px 24px;max-height:66vh;overflow-y:auto;overflow-x:hidden}
+  .modal-b{padding:22px 24px;max-height:78vh;overflow-y:auto;overflow-x:hidden}
   .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .field{margin-bottom:16px}.field.full{grid-column:1/-1}
   .field label{display:block;font-size:12px;font-weight:600;color:var(--txt-2);margin-bottom:6px}
@@ -306,9 +306,28 @@
   .log-item{background:var(--paper-2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:13px}
   .log-item .lt{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--txt-3);font-weight:600;margin-bottom:5px}
   .log-add{display:flex;gap:8px;margin-top:9px;flex-wrap:nowrap;align-items:center}
-  .log-add input[id=f_log_autor]{flex:0 0 150px;min-width:120px;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:#fff;font:inherit;font-size:14px;color:var(--txt);outline:none}
-  .log-add input[id=f_log_autor]:focus{border-color:var(--accent)}
+  .log-add input{flex:1;min-width:170px;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:#fff}
   .log-add button{padding:0 18px;border-radius:9px;background:var(--ink);color:#fff;font-weight:600;font-size:13px;height:42px;flex-shrink:0}
+  .log-autor-bar{font-size:12px;color:var(--txt-3);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+  .log-autor-bar b{color:var(--txt-2)}
+  /* Pessoas envolvidas (chips) */
+  .envolvidos{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .env-chip{display:inline-flex;align-items:center;gap:5px;background:var(--paper);border:1px solid var(--line-2);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;color:var(--txt-2)}
+  .env-chip .av-xs{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+  /* Subatividades */
+  .sub-list{margin:8px 0 4px 28px;display:flex;flex-direction:column;gap:3px}
+  .sub-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px dashed var(--line)}
+  .sub-row:last-of-type{border-bottom:none}
+  .sub-row.done .sub-ttl{text-decoration:line-through;opacity:.55}
+  .sub-ttl{flex:1;font-size:12.5px;color:var(--txt-2)}
+  .sub-del{flex-shrink:0;background:transparent;border:none;color:var(--txt-3);font-size:12px;cursor:pointer;padding:2px 5px;border-radius:5px;line-height:1}
+  .sub-del:hover{background:var(--red-bg);color:var(--red)}
+  .sub-add{display:flex;gap:6px;margin-top:6px;margin-left:28px}
+  .sub-add input{flex:1;padding:6px 10px;border:1px dashed var(--line-2);border-radius:7px;background:transparent;font:inherit;font-size:12.5px;color:var(--txt);outline:none}
+  .sub-add input:focus{border-style:solid;border-color:var(--accent);background:#fff}
+  .sub-add button{padding:6px 11px;border-radius:7px;background:var(--ink-2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;border:none;white-space:nowrap}
+  .sub-add button:hover{background:var(--accent)}
+  .sub-count{font-size:11px;font-weight:600;color:var(--txt-3);margin-top:3px}
   /* @MENTION */
   .mention-wrap{position:relative;flex:1;min-width:170px}
   .mention-wrap>input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:#fff;font:inherit;font-size:14px;color:var(--txt);outline:none;box-sizing:border-box}
@@ -722,12 +741,27 @@ function atvListHTML(){
       </div></div>`;
     }
     const {cls,label}=actDue(t);
+    const subs=(t.subs||[]);
+    const subsAbertos=subs.filter(s=>!s.feito).length;
+    const subHtml=`
+      <div class="sub-list">
+        ${subs.map(s=>`<div class="sub-row ${s.feito?'done':''}">
+          <label class="myact-chk" style="width:16px;height:16px"><input type="checkbox" ${s.feito?'checked':''} onchange="toggleSubAtv('${t.id}','${s.id}')"><span style="width:16px;height:16px;border-radius:4px"></span></label>
+          <span class="sub-ttl">${esc(s.titulo)}</span>
+          <button class="sub-del" onclick="delSubAtv('${t.id}','${s.id}')" title="Remover">\u2715</button>
+        </div>`).join('')}
+        <div class="sub-add">
+          <input id="subInp_${t.id}" type="text" placeholder="Nova subatividade..." onkeydown="if(event.key==='Enter')addSubAtv('${t.id}')">
+          <button onclick="addSubAtv('${t.id}')">+ Sub</button>
+        </div>
+      </div>`;
     return `<div class="atv-row ${t.feito?'is-done':''}">
       <label class="myact-chk"><input type="checkbox" ${t.feito?'checked':''} onchange="toggleMyAct('${t.id}')"><span></span></label>
       <div class="atv-main">
         <div class="atv-ttl">${esc(t.titulo)}</div>
         ${t.desc?`<div class="atv-desc">${esc(t.desc)}</div>`:''}
-        <div class="atv-meta">${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:'<span class="atv-nodate">sem prazo</span>'}${t.criadoEm?`<span class="atv-created">criada ${fmtDate(t.criadoEm)}</span>`:''}</div>
+        <div class="atv-meta">${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:'<span class="atv-nodate">sem prazo</span>'}${t.criadoEm?`<span class="atv-created">criada ${fmtDate(t.criadoEm)}</span>`:''}${subs.length?`<span class="sub-count">\u2514 ${subs.length-subsAbertos}/${subs.length} subs</span>`:''}</div>
+        ${subHtml}
       </div>
       <button class="atv-btn" onclick="startEditAtv('${t.id}')">\u270e Editar</button>
       <button class="myact-del" onclick="delMyAct('${t.id}')" title="Remover">\u2715</button>
@@ -950,9 +984,13 @@ function openModal(pid){
           <div class="task-list" id="taskList"></div></div>
         <div style="font-size:11.5px;color:var(--txt-3);margin-top:7px">Marque a atividade para o % subir. Defina o <b>per\u00edodo</b> (in\u00edcio \u2192 fim) de cada atividade. "Reagendar pela entrega" redistribui os per\u00eddos para fechar entre o in\u00edcio e a data de entrega do projeto.</div></div>
       <div class="field full"><label>Status & atualiza\u00e7\u00f5es \u2014 use <b>@Nome</b> para marcar algu\u00e9m do time (envia e-mail de notifica\u00e7\u00e3o)</label>
+        <div class="log-autor-bar">Registrando como: <b id="logAutorName">\u2014</b></div>
+        <div id="pessoasEnvolvidasWrap" style="display:none">
+          <div style="font-size:11.5px;color:var(--txt-3);margin-bottom:5px">Mencionados neste projeto:</div>
+          <div class="envolvidos" id="envolvidos"></div>
+        </div>
         <div class="log-list" id="logList"></div>
         <div class="log-add">
-          <input id="f_log_autor" value="${esc(p.resp||'')}" placeholder="Quem reportou">
           <div class="mention-wrap" id="mentionWrap">
             <input id="f_log" placeholder="Ex.: Aguardando aprova\u00e7\u00e3o\u2026 use @Nome para marcar algu\u00e9m" onkeydown="if(event.key==='Enter'&&!mentionOpen())addLog()">
             <div class="mention-drop" id="mentionDrop"></div>
@@ -969,6 +1007,10 @@ function openModal(pid){
   $('#f_tipo').addEventListener('change',function(){if(!modalTasks.length||modalTasks.every(t=>!t.done))applyTemplate(true);});
   renderTaskList();renderLogList();
   setTimeout(()=>setupMentionInput(),50);
+  // Auto-fill autor do log com o usuário logado
+  const lan=$('#logAutorName');if(lan)lan.textContent=getLogAutor();
+  // Pessoas envolvidas (mencionadas nos logs)
+  renderPessoasEnvolvidas(modalLogs);
 }
 function closeModal(){$('#modalMount').innerHTML='';editingId=null;modalTasks=[];modalLogs=[];}
 function refitTasks(){const ini=$('#f_inicio').value,pz=$('#f_prazo').value;if(ini&&pz)fitToDelivery(modalTasks,ini,pz);else scheduleTasks(modalTasks,ini);renderTaskList();}
@@ -1000,7 +1042,7 @@ function renderAutoPanel(){const el=$('#autoPanel');if(!el)return;const pp=modal
     <div class="ap-sug" style="border-left-color:${tc}"><b style="color:${tc}">Sugest\u00e3o:</b> ${esc(sg.txt)}</div>`;}
 function taskDone(i,c){const t=modalTasks[i];t.done=c;t.doneDate=c?new Date().toISOString().slice(0,10):null;
   const nome=(t.nome||'').trim()||'atividade';const txt='\u2713 Conclu\u00edda: '+nome;
-  const autor=t.resp||($('#f_resp')?$('#f_resp').value:'')||'';
+  const autor=t.resp||getLogAutor();
   if(c){if(!modalLogs.some(l=>l.txt===txt))modalLogs.push({t:new Date().toISOString().slice(0,10),autor,txt});}
   else{for(let k=modalLogs.length-1;k>=0;k--){if(modalLogs[k].txt===txt){modalLogs.splice(k,1);break;}}}
   renderTaskList();renderLogList();}
@@ -1018,12 +1060,12 @@ function renderLogList(){
   }).join('');}
 function addLog(){
   const inp=$('#f_log');if(!inp||!inp.value.trim())return;
-  const autor=$('#f_log_autor')?$('#f_log_autor').value:'';
+  const autor=getLogAutor();
   const txt=inp.value.trim();
   const mentions=extractMentions(txt);
   if(mentions.length){const proj=editingId?DB.projects.find(x=>x.id===editingId):null;sendMentionNotif(mentions,proj?proj.nome:'(projeto)',txt,autor);}
   modalLogs.push({t:new Date().toISOString().slice(0,10),autor,txt});
-  inp.value='';renderLogList();
+  inp.value='';renderLogList();renderPessoasEnvolvidas(modalLogs);
 }
 async function saveProject(){
   const g=x=>$('#'+x).value;const nome=g('f_nome').trim();if(!nome){toast('Informe o nome do projeto');return;}
@@ -1168,6 +1210,55 @@ async function sendStatusEmail(){
     if(r.ok)toast('Status enviado por e-mail \u2713');
     else toast('Erro: '+((j&&(j.error||j.message))||'verifique a Edge Function daily-status'));
   }catch(e){console.error('[send-status]',e);toast('N\u00e3o foi poss\u00edvel chamar a Edge Function.');}
+}
+
+/* ===== AUTOR DO LOG (usuário logado) ===== */
+function getLogAutor(){
+  if(currentUser&&currentUser.email){
+    const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
+    if(me)return me.nome;
+    // fallback: parte antes do @ do e-mail
+    return currentUser.email.split('@')[0];
+  }
+  return 'Equipe';
+}
+
+/* ===== PESSOAS ENVOLVIDAS NO PROJETO (via @mentions nos logs) ===== */
+function renderPessoasEnvolvidas(logs){
+  const wrap=$('#pessoasEnvolvidasWrap');const el=$('#envolvidos');
+  if(!wrap||!el)return;
+  const nomes=new Set();
+  (logs||[]).forEach(l=>{
+    const m=(l.txt||'').match(/@([\w\u00C0-\u00FF][^\s@,;.!?\u2014]*)/g)||[];
+    m.forEach(match=>{
+      const q=match.slice(1).trim();
+      const found=DB.team.find(p=>p.nome.toLowerCase()===q.toLowerCase()||p.nome.toLowerCase().startsWith(q.toLowerCase()));
+      if(found)nomes.add(found.nome);
+    });
+  });
+  if(!nomes.size){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  el.innerHTML=[...nomes].map(nome=>`<span class="env-chip"><span class="av-xs" style="background:${avColor(nome)}">${initials(nome)}</span>${esc(nome)}</span>`).join('');
+}
+
+/* ===== SUBATIVIDADES ===== */
+function addSubAtv(parentId){
+  const inp=$('#subInp_'+parentId);
+  if(!inp||!inp.value.trim())return;
+  const t=myActs.find(x=>x.id===parentId);if(!t)return;
+  if(!t.subs)t.subs=[];
+  t.subs.push({id:id(),titulo:inp.value.trim(),feito:false});
+  inp.value='';
+  saveMyActs();refreshActs();
+}
+function toggleSubAtv(parentId,subId){
+  const t=myActs.find(x=>x.id===parentId);if(!t||!t.subs)return;
+  const s=t.subs.find(x=>x.id===subId);if(!s)return;
+  s.feito=!s.feito;saveMyActs();refreshActs();
+}
+function delSubAtv(parentId,subId){
+  const t=myActs.find(x=>x.id===parentId);if(!t||!t.subs)return;
+  t.subs=t.subs.filter(x=>x.id!==subId);saveMyActs();refreshActs();
 }
 
 boot();
