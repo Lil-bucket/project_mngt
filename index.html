@@ -316,19 +316,6 @@
   .env-chip{display:inline-flex;align-items:center;gap:5px;background:var(--paper);border:1px solid var(--line-2);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;color:var(--txt-2)}
   .env-chip .av-xs{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
   /* Subatividades */
-  .sub-list{margin:8px 0 4px 28px;display:flex;flex-direction:column;gap:3px}
-  .sub-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px dashed var(--line)}
-  .sub-row:last-of-type{border-bottom:none}
-  .sub-row.done .sub-ttl{text-decoration:line-through;opacity:.55}
-  .sub-ttl{flex:1;font-size:12.5px;color:var(--txt-2)}
-  .sub-del{flex-shrink:0;background:transparent;border:none;color:var(--txt-3);font-size:12px;cursor:pointer;padding:2px 5px;border-radius:5px;line-height:1}
-  .sub-del:hover{background:var(--red-bg);color:var(--red)}
-  .sub-add{display:flex;gap:6px;margin-top:6px;margin-left:28px}
-  .sub-add input{flex:1;padding:6px 10px;border:1px dashed var(--line-2);border-radius:7px;background:transparent;font:inherit;font-size:12.5px;color:var(--txt);outline:none}
-  .sub-add input:focus{border-style:solid;border-color:var(--accent);background:#fff}
-  .sub-add button{padding:6px 11px;border-radius:7px;background:var(--ink-2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;border:none;white-space:nowrap}
-  .sub-add button:hover{background:var(--accent)}
-  .sub-count{font-size:11px;font-weight:600;color:var(--txt-3);margin-top:3px}
   /* DEMANDAS */
   .dmd-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--line-2)}
   .dmd-card.aberta{border-left-color:var(--blue)}
@@ -355,6 +342,17 @@
   .dmd-form input:focus,.dmd-form select:focus,.dmd-form textarea:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(255,84,54,.1)}
   .dmd-form select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' stroke='%238b8d95' stroke-width='1.5' fill='none'/></svg>");background-repeat:no-repeat;background-position:right 11px center}
   @media(max-width:720px){.dmd-form{grid-template-columns:1fr}}
+  /* Subitens nas tarefas do projeto */
+  .tsubs-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-2);display:flex;flex-direction:column;gap:4px}
+  .tsub-row{display:flex;align-items:center;gap:7px}
+  .tsub-row.done .tsub-inp{text-decoration:line-through;opacity:.5}
+  .tsub-inp{flex:1;padding:5px 9px;border:1px solid var(--line-2);border-radius:6px;background:transparent;font:inherit;font-size:12.5px;color:var(--txt);outline:none}
+  .tsub-inp:focus{border-color:var(--accent);background:#fff}
+  .tsub-del{flex-shrink:0;background:transparent;border:none;color:var(--txt-3);font-size:11px;cursor:pointer;padding:3px 5px;border-radius:4px}
+  .tsub-del:hover{background:var(--red-bg);color:var(--red)}
+  /* Demanda inline na atividade pessoal */
+  .dmd-atv-tag{margin-top:8px;padding:8px 12px;background:var(--blue-bg);border-radius:8px;font-size:12.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .dmd-atv-form{margin-top:8px;padding:12px 14px;background:var(--paper-2);border:1px solid var(--line-2);border-radius:10px}
   /* @MENTION */
   .mention-wrap{position:relative;flex:1;min-width:170px}
   .mention-wrap>input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:#fff;font:inherit;font-size:14px;color:var(--txt);outline:none;box-sizing:border-box}
@@ -810,29 +808,30 @@ function atvListHTML(){
       </div></div>`;
     }
     const {cls,label}=actDue(t);
-    const subs=(t.subs||[]);
-    const subsAbertos=subs.filter(s=>!s.feito).length;
-    const subHtml=`
-      <div class="sub-list">
-        ${subs.map(s=>`<div class="sub-row ${s.feito?'done':''}">
-          <label class="myact-chk" style="width:16px;height:16px"><input type="checkbox" ${s.feito?'checked':''} onchange="toggleSubAtv('${t.id}','${s.id}')"><span style="width:16px;height:16px;border-radius:4px"></span></label>
-          <span class="sub-ttl">${esc(s.titulo)}</span>
-          <button class="sub-del" onclick="delSubAtv('${t.id}','${s.id}')" title="Remover">\u2715</button>
-        </div>`).join('')}
-        <div class="sub-add">
-          <input id="subInp_${t.id}" type="text" placeholder="Nova subatividade..." onkeydown="if(event.key==='Enter')addSubAtv('${t.id}')">
-          <button onclick="addSubAtv('${t.id}')">+ Sub</button>
+    // Demanda inline form
+    const showDmdForm=(_openDmdAtvId===t.id&&!t.demandaId);
+    const targets=getDemandaTargets();
+    const tOpts=targets.length?[`<option value="">Selecione...</option>`,...targets.map(p=>`<option value="${esc(p.nome)}">${esc(p.nome)}${p.empresa?' \u00b7 '+esc(p.empresa):''}</option>`)].join(''):'<option>Nenhum dispon\u00edvel</option>';
+    const dmdInfo=t.demandaId?`<div class="dmd-atv-tag">\ud83d\udce4 Demanda para <b>${esc(t.demandaPara||'?')}</b> \u00b7 <span class="dmd-badge ${(demandas.find(d=>d.id===t.demandaId)||{status:'aberta'}).status}" style="padding:1px 7px;font-size:10.5px">${dmdStatusLabel((demandas.find(d=>d.id===t.demandaId)||{status:'aberta'}).status)}</span> <button class="atv-btn" style="font-size:11px;padding:3px 8px;color:var(--txt-3)" onclick="cancelarDemanda('${t.id}')">Cancelar demanda</button></div>`:
+      (showDmdForm?`<div class="dmd-atv-form">
+        <div style="font-size:12px;font-weight:600;color:var(--txt-2);margin-bottom:6px">\ud83d\udce4 Delegar para:</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <select id="dmdPara_${t.id}" style="padding:7px 10px;border:1px solid var(--line-2);border-radius:8px;background:#fff;font:inherit;font-size:13px;flex:1;min-width:160px">${tOpts}</select>
+          <button class="btn-acc" style="padding:7px 14px" onclick="createDemandaFromAtv('${t.id}')">Criar demanda</button>
+          <button class="btn-ghost" style="padding:7px 12px" onclick="abrirDemandaForm(null)">Cancelar</button>
         </div>
-      </div>`;
+        <div style="font-size:11.5px;color:var(--txt-3);margin-top:6px">\ud83d\udca1 A pessoa selecionada ver\u00e1 esta demanda na \u00e1rea de Atividades</div>
+      </div>`:'');
     return `<div class="atv-row ${t.feito?'is-done':''}">
       <label class="myact-chk"><input type="checkbox" ${t.feito?'checked':''} onchange="toggleMyAct('${t.id}')"><span></span></label>
       <div class="atv-main">
         <div class="atv-ttl">${esc(t.titulo)}</div>
         ${t.desc?`<div class="atv-desc">${esc(t.desc)}</div>`:''}
-        <div class="atv-meta">${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:'<span class="atv-nodate">sem prazo</span>'}${t.criadoEm?`<span class="atv-created">criada ${fmtDate(t.criadoEm)}</span>`:''}${subs.length?`<span class="sub-count">\u2514 ${subs.length-subsAbertos}/${subs.length} subs</span>`:''}</div>
-        ${subHtml}
+        <div class="atv-meta">${t.prazo?`<span class="myact-due ${cls}">${label}</span>`:'<span class="atv-nodate">sem prazo</span>'}${t.criadoEm?`<span class="atv-created">criada ${fmtDate(t.criadoEm)}</span>`:''}</div>
+        ${dmdInfo}
       </div>
       <button class="atv-btn" onclick="startEditAtv('${t.id}')">\u270e Editar</button>
+      ${!t.demandaId?`<button class="atv-btn" style="color:var(--blue);border-color:var(--blue-bg)" onclick="abrirDemandaForm('${t.id}')">\ud83d\udce4 Delegar</button>`:''}
       <button class="myact-del" onclick="delMyAct('${t.id}')" title="Remover">\u2715</button>
     </div>`;
   }).join('');
@@ -1092,7 +1091,17 @@ function renderTaskList(){
   renderAutoPanel();
   if(!modalTasks.length){tl.innerHTML='<div class="td-sub" style="padding:8px">Nenhuma atividade. Escolha um tipo e clique em "Aplicar modelo", ou adicione manualmente.</div>';return;}
   const ro=t=>['<option>\u2014</option>',...DB.team.map(p=>`<option ${t.resp===p.nome?'selected':''}>${esc(p.nome)}</option>`)].join('');
-  tl.innerHTML=modalTasks.map((t,i)=>`<div class="task-row ${t.done?'done':''}">
+  tl.innerHTML=modalTasks.map((t,i)=>{
+    const subs=t.subs||[];
+    const subsDoneCount=subs.filter(s=>s.feito).length;
+    const subsHTML=subs.length||true?`<div class="tsubs-wrap" style="${!subs.length?'display:none':''}">
+      ${subs.map(s=>`<div class="tsub-row ${s.feito?'done':''}">
+        <input type="checkbox" style="width:14px;height:14px;accent-color:var(--green);flex-shrink:0;cursor:pointer" ${s.feito?'checked':''} onchange="toggleTaskSub(${i},'${s.id}')">
+        <input class="tsub-inp" data-tsub="${s.id}" value="${esc(s.titulo)}" oninput="updateTaskSubTitle(${i},'${s.id}',this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();addTaskSub(${i});}" placeholder="Subitem...">
+        <button class="tsub-del" onclick="delTaskSub(${i},'${s.id}')" title="Remover">\u2715</button>
+      </div>`).join('')}
+    </div>`:'';
+    return `<div class="task-row ${t.done?'done':''}">
     <input type="checkbox" class="t-ck" ${t.done?'checked':''} onchange="taskDone(${i},this.checked)">
     <div class="t-body">
       <input class="t-name" value="${esc(t.nome)}" oninput="modalTasks[${i}].nome=this.value" placeholder="Nome da atividade">
@@ -1102,8 +1111,11 @@ function renderTaskList(){
         <span class="t-move"><button onclick="taskMove(${i},-1)" title="Subir">\u25b2</button><button onclick="taskMove(${i},1)" title="Descer">\u25bc</button></span>
       </div>
       <input class="t-obs" value="${esc(t.obs||'')}" oninput="modalTasks[${i}].obs=this.value" placeholder="Observa\u00e7\u00e3o (opcional)">
+      ${subsHTML}
+      <button class="mini-btn" style="font-size:11px;padding:3px 9px;margin-top:6px;color:var(--txt-3)" onclick="addTaskSub(${i})">\u2514 + Subitem${subs.length?` (${subsDoneCount}/${subs.length})`:''}</button>
     </div>
-    <button class="t-del" onclick="taskDel(${i})" title="Remover">\u2715</button></div>`).join('');
+    <button class="t-del" onclick="taskDel(${i})" title="Remover">\u2715</button></div>`;
+  }).join('');
 }
 function modalProj(){return {tasks:modalTasks,prazo:$('#f_prazo')?$('#f_prazo').value:'',inicio:$('#f_inicio')?$('#f_inicio').value:'',bloqueado:$('#f_bloq')?$('#f_bloq').checked:false};}
 function renderAutoPanel(){const el=$('#autoPanel');if(!el)return;const pp=modalProj();const et=stageOf(autoEtapa(pp)),st=statusOf(autoStatus(pp)),sg=suggestion(pp);
@@ -1313,26 +1325,59 @@ function renderPessoasEnvolvidas(logs){
 }
 
 /* ===== SUBATIVIDADES ===== */
-function addSubAtv(parentId){
-  const inp=$('#subInp_'+parentId);
-  if(!inp||!inp.value.trim())return;
-  const t=myActs.find(x=>x.id===parentId);if(!t)return;
+/* ===== SUBITENS NOS PROJETOS (dentro do modal de tarefas) ===== */
+function addTaskSub(taskIdx){
+  const t=modalTasks[taskIdx];if(!t)return;
   if(!t.subs)t.subs=[];
-  t.subs.push({id:id(),titulo:inp.value.trim(),feito:false});
-  inp.value='';
-  saveMyActs();refreshActs();
+  const nid=id();
+  t.subs.push({id:nid,titulo:'',feito:false});
+  renderTaskList();
+  setTimeout(()=>{const el=document.querySelector(`[data-tsub="${nid}"]`);if(el){el.focus();}},40);
 }
-function toggleSubAtv(parentId,subId){
-  const t=myActs.find(x=>x.id===parentId);if(!t||!t.subs)return;
-  const s=t.subs.find(x=>x.id===subId);if(!s)return;
-  s.feito=!s.feito;saveMyActs();refreshActs();
+function toggleTaskSub(taskIdx,subId){
+  const t=modalTasks[taskIdx];if(!t)return;
+  const s=(t.subs||[]).find(x=>x.id===subId);if(!s)return;
+  s.feito=!s.feito;renderTaskList();
 }
-function delSubAtv(parentId,subId){
-  const t=myActs.find(x=>x.id===parentId);if(!t||!t.subs)return;
-  t.subs=t.subs.filter(x=>x.id!==subId);saveMyActs();refreshActs();
+function delTaskSub(taskIdx,subId){
+  const t=modalTasks[taskIdx];if(!t)return;
+  t.subs=(t.subs||[]).filter(x=>x.id!==subId);renderTaskList();
+}
+function updateTaskSubTitle(taskIdx,subId,val){
+  const t=modalTasks[taskIdx];if(!t)return;
+  const s=(t.subs||[]).find(x=>x.id===subId);if(s)s.titulo=val;
 }
 
 /* ===== DEMANDAS ===== */
+let _openDmdAtvId=null;
+function abrirDemandaForm(atvId){_openDmdAtvId=atvId;refreshActs();}
+
+async function createDemandaFromAtv(atvId){
+  const t=myActs.find(x=>x.id===atvId);if(!t)return;
+  const paraSel=$('#dmdPara_'+atvId);
+  const para=paraSel?paraSel.value:'';
+  if(!para){toast('Selecione o respons\u00e1vel.');return;}
+  const de=getMyName()||'Equipe';
+  const dId=id();
+  demandas.unshift({id:dId,titulo:t.titulo,desc:t.desc||'',prazo:t.prazo||'',para,de,status:'aberta',criadoEm:new Date().toISOString().slice(0,10)});
+  t.demandaId=dId;t.demandaPara=para;
+  _openDmdAtvId=null;
+  await Promise.all([saveDemandas(),saveMyActs()]);
+  refreshActs();refreshDemandas();
+  toast('Demanda criada \u2713');
+}
+
+async function cancelarDemanda(atvId){
+  const t=myActs.find(x=>x.id===atvId);if(!t||!t.demandaId)return;
+  if(!confirm('Cancelar esta demanda?'))return;
+  const d=demandas.find(x=>x.id===t.demandaId);
+  if(d)d.status='cancelada';
+  delete t.demandaId;delete t.demandaPara;
+  await Promise.all([saveDemandas(),saveMyActs()]);
+  refreshActs();refreshDemandas();
+  toast('Demanda cancelada.');
+}
+
 async function loadDemandas(){
   if(useSb&&SB){
     try{
@@ -1397,20 +1442,15 @@ function refreshDemandas(){
 }
 function demandasHTML(){
   const myName=getMyName();
-  const targets=getDemandaTargets();
 
-  // Permissão: somente quem é do time interno ou manager cria demandas
-  const meTeam=(DB.team||[]).find(p=>p.nome===myName);
-  const canCreate=!!(meTeam||isManager);
-
-  // Separar demandas: enviadas por mim, recebidas por mim, todas (gestor)
-  const enviadas=demandas.filter(d=>d.de===myName);
-  const recebidas=demandas.filter(d=>d.para===myName);
-  const demaisGestor=isManager?demandas.filter(d=>d.de!==myName&&d.para!==myName):[];
+  // Separar demandas
+  const enviadas=demandas.filter(d=>d.de===myName&&d.status!=='cancelada');
+  const recebidas=demandas.filter(d=>d.para===myName&&d.status!=='cancelada');
+  const demaisGestor=isManager?demandas.filter(d=>d.de!==myName&&d.para!==myName&&d.status!=='cancelada'):[];
 
   const dmdCard=(d,canDel)=>{
     const dd=daysTo(d.prazo);
-    const prazoLabel=!d.prazo?'':(dd<0?`<span class="dmd-late">${Math.abs(dd)}d atrasada</span>`:(dd===0?'<span class="dmd-late">vence hoje</span>':`em ${dd}d`));
+    const prazoLabel=!d.prazo?'':(dd<0?`<span style="color:var(--red);font-weight:700">${Math.abs(dd)}d atrasada</span>`:(dd===0?`<span style="color:var(--amber);font-weight:700">vence hoje</span>`:`em ${dd}d`));
     const statusOpts=['aberta','em_andamento','concluida','cancelada'].map(s=>`<option value="${s}" ${d.status===s?'selected':''}>${dmdStatusLabel(s)}</option>`).join('');
     return `<div class="dmd-card ${d.status}">
       <div class="dmd-header">
@@ -1418,10 +1458,9 @@ function demandasHTML(){
         <span class="dmd-badge ${d.status}">${dmdStatusLabel(d.status)}</span>
       </div>
       <div class="dmd-meta">
-        <span>\ud83d\udce4 De: <b>${esc(d.de)}</b></span>
-        <span>\ud83d\udce5 Para: <b>${esc(d.para)}</b></span>
+        <span>\ud83d\udce4 <b>${esc(d.de)}</b> \u2192 \ud83d\udce5 <b>${esc(d.para)}</b></span>
         ${d.prazo?`<span>\ud83d\udcc5 ${fmtDate(d.prazo)} ${prazoLabel}</span>`:''}
-        <span style="margin-left:auto;font-size:11px">criada ${fmtDate(d.criadoEm)}</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--txt-3)">criada ${fmtDate(d.criadoEm)}</span>
       </div>
       ${d.desc?`<div class="dmd-desc">${esc(d.desc)}</div>`:''}
       <div class="dmd-footer">
@@ -1431,50 +1470,15 @@ function demandasHTML(){
     </div>`;
   };
 
-  // Form de nova demanda
-  const targetOpts=targets.length
-    ?[`<option value="">Selecione...</option>`,...targets.map(p=>`<option value="${esc(p.nome)}">${esc(p.nome)}${p.empresa?' \u00b7 '+esc(p.empresa):''}</option>`)].join('')
-    :`<option value="">Nenhum dispon\u00edvel</option>`;
-
-  const permLabel=isManager
-    ?'Pode direcionar para todo o time e ag\u00eancias'
-    :'Pode direcionar apenas para ag\u00eancias';
-
-  const formSection=canCreate?`
-    <div class="panel" style="margin-top:20px">
-      <div class="panel-h"><h3>\ud83d\udce4 Nova demanda</h3><span class="tag">${permLabel}</span></div>
-      <div class="panel-b" style="padding:16px">
-        <div class="dmd-form">
-          <div>
-            <label>T\u00edtulo da demanda</label>
-            <input id="dmd_titulo" placeholder="Ex.: Criar briefing da campanha..." onkeydown="if(event.key==='Enter')createDemanda()">
-          </div>
-          <div>
-            <label>Para quem</label>
-            <select id="dmd_para">${targetOpts}</select>
-          </div>
-          <div>
-            <label>Prazo (opcional)</label>
-            <input id="dmd_prazo" type="date">
-          </div>
-          <div>
-            <label>Descri\u00e7\u00e3o / contexto (opcional)</label>
-            <input id="dmd_desc" placeholder="Detalhes, links, refer\u00eancias...">
-          </div>
-        </div>
-        <button class="btn-acc" onclick="createDemanda()">\ud83d\udce4 Enviar demanda</button>
-      </div>
-    </div>`:'';
-
-  const envList=enviadas.length?enviadas.map(d=>dmdCard(d,true)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda enviada ainda.</div>`;
+  const envList=enviadas.length?enviadas.map(d=>dmdCard(d,true)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda ativa enviada.<br><span style="font-size:12px;color:var(--txt-3)">Clique em \ud83d\udce4 Delegar em qualquer atividade acima.</span></div>`;
   const recList=recebidas.length?recebidas.map(d=>dmdCard(d,false)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda recebida ainda.</div>`;
   const demaisSection=demaisGestor.length?`
     <div class="panel" style="margin-top:16px">
-      <div class="panel-h"><h3>\ud83d\udcca Todas as demandas do time</h3><span class="tag">${demaisGestor.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativas</span></div>
+      <div class="panel-h"><h3>\ud83d\udcca Demandas do time (vis\u00e3o gestor)</h3><span class="tag">${demaisGestor.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativas</span></div>
       <div class="panel-b" style="padding:8px">${demaisGestor.map(d=>dmdCard(d,true)).join('')}</div>
     </div>`:'';
 
-  return `${formSection}
+  return `
     <div class="panel" style="margin-top:16px">
       <div class="panel-h"><h3>\ud83d\udce4 Demandas enviadas</h3><span class="tag">${enviadas.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativa(s)</span></div>
       <div class="panel-b" style="padding:8px">${envList}</div>
