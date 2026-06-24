@@ -55,6 +55,7 @@
   .side-foot button.logout:hover{background:var(--red);color:#fff}
   .side-foot button.invite{background:var(--ink-3);color:#a0d4b4}
   .side-foot button.invite:hover{background:var(--green);color:#fff}
+  #linkPOControl:hover{background:var(--accent)!important;color:#fff!important}
   .myact-add{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
   .myact-add input[type=text],.myact-add input:not([type]){flex:1;min-width:180px}
   .myact-add input{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 11px;font:inherit;font-size:13px;outline:none}
@@ -411,6 +412,7 @@
       <div id="acctInfo" class="acct-info hide" title="Conta conectada"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg><span id="acctLbl">Conta</span></div>
       <button id="logoutBtn" class="logout hide" onclick="acctMenu()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5M21 12H9M12 19a7 7 0 110-14"/></svg>Sair do painel</button>
       <button id="btnConvidar" class="invite hide" onclick="openInviteModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Convidar pessoa</button>
+      <a id="linkPOControl" class="hide" href="https://lil-bucket.github.io/controle-po/" target="_blank" style="width:100%;padding:10px;border-radius:9px;background:var(--ink-2);color:#cfd2da;font-weight:600;font-size:12.5px;display:flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;transition:.15s;box-sizing:border-box"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17h7M17 14v7"/></svg>Portal PO Control <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
       <button onclick="openPeople()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Pessoas & empresas</button>
       <button onclick="exportJSON()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Backup (.json)</button>
       <button class="reset" onclick="resetAll()">Limpar tudo</button>
@@ -447,6 +449,9 @@
 const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';
 const MANAGER_EMAILS=['lucas.baldim@tclsemp.com.br'];
+// Anon key do Controle de PO (uryzzerzmmuwuqxjwwec) — cole aqui a mesma chave que está
+// nas primeiras linhas do arquivo controle-po/index.html (const SUPABASE_ANON_KEY=...)
+const PO_ANON_KEY='COLE_AQUI_A_ANON_KEY_DO_PO_CONTROL';
 const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
 let SB=null,currentUser=null,isManager=false,booted=false;
 if(useSb){try{SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init:',e);}}
@@ -633,6 +638,21 @@ function applyRole(){
     const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
     if(me){const fr=$('#fResp');if(fr){fr.value=me.nome;render();}}
   }
+  // Verifica acesso ao PO Control de forma assíncrona
+  if(useSb&&currentUser)checkPOAccess(currentUser.email);
+}
+async function checkPOAccess(email){
+  const link=$('#linkPOControl');if(!link)return;
+  if(!PO_ANON_KEY||PO_ANON_KEY.startsWith('COLE_'))return; // placeholder não preenchido
+  try{
+    const r=await fetch('https://uryzzerzmmuwuqxjwwec.supabase.co/rest/v1/rpc/tem_acesso',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':PO_ANON_KEY,'Authorization':'Bearer '+PO_ANON_KEY},
+      body:JSON.stringify({p_email:(email||'').toLowerCase()})
+    });
+    const result=await r.json();
+    if(result===true)link.classList.remove('hide');
+  }catch(e){console.warn('[PO link] check falhou:',e);}
 }
 async function acctMenu(){if(!useSb)return;if(confirm('Sair da conta '+((currentUser&&currentUser.email)||'')+'?'))signOut();}
 function filtered(){const r=$('#fResp').value,s=$('#fStatus').value;return DB.projects.filter(p=>(!r||p.resp===r)&&(!s||p.status===s));}
