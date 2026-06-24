@@ -311,12 +311,9 @@
   .log-add button{padding:0 18px;border-radius:9px;background:var(--ink);color:#fff;font-weight:600;font-size:13px;height:42px;flex-shrink:0}
   .log-autor-bar{font-size:12px;color:var(--txt-3);margin-bottom:6px;display:flex;align-items:center;gap:5px}
   .log-autor-bar b{color:var(--txt-2)}
-  /* Pessoas envolvidas (chips) */
   .envolvidos{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
   .env-chip{display:inline-flex;align-items:center;gap:5px;background:var(--paper);border:1px solid var(--line-2);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;color:var(--txt-2)}
   .env-chip .av-xs{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
-  /* Subatividades */
-  /* DEMANDAS */
   .dmd-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--line-2)}
   .dmd-card.aberta{border-left-color:var(--blue)}
   .dmd-card.em_andamento{border-left-color:var(--amber)}
@@ -342,7 +339,6 @@
   .dmd-form input:focus,.dmd-form select:focus,.dmd-form textarea:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(255,84,54,.1)}
   .dmd-form select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' stroke='%238b8d95' stroke-width='1.5' fill='none'/></svg>");background-repeat:no-repeat;background-position:right 11px center}
   @media(max-width:720px){.dmd-form{grid-template-columns:1fr}}
-  /* Subitens nas tarefas do projeto */
   .tsubs-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line-2);display:flex;flex-direction:column;gap:4px}
   .tsub-row{display:flex;align-items:center;gap:7px}
   .tsub-row.done .tsub-inp{text-decoration:line-through;opacity:.5}
@@ -350,10 +346,8 @@
   .tsub-inp:focus{border-color:var(--accent);background:#fff}
   .tsub-del{flex-shrink:0;background:transparent;border:none;color:var(--txt-3);font-size:11px;cursor:pointer;padding:3px 5px;border-radius:4px}
   .tsub-del:hover{background:var(--red-bg);color:var(--red)}
-  /* Demanda inline na atividade pessoal */
   .dmd-atv-tag{margin-top:8px;padding:8px 12px;background:var(--blue-bg);border-radius:8px;font-size:12.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .dmd-atv-form{margin-top:8px;padding:12px 14px;background:var(--paper-2);border:1px solid var(--line-2);border-radius:10px}
-  /* @MENTION */
   .mention-wrap{position:relative;flex:1;min-width:170px}
   .mention-wrap>input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:#fff;font:inherit;font-size:14px;color:var(--txt);outline:none;box-sizing:border-box}
   .mention-wrap>input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,84,54,.12)}
@@ -437,7 +431,7 @@
       <div id="acctInfo" class="acct-info hide" title="Conta conectada"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg><span id="acctLbl">Conta</span></div>
       <button id="logoutBtn" class="logout hide" onclick="acctMenu()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5M21 12H9M12 19a7 7 0 110-14"/></svg>Sair do painel</button>
       <button id="btnConvidar" class="invite hide" onclick="openInviteModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Convidar pessoa</button>
-      <button onclick="openPeople()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Pessoas & empresas</button>
+      <button onclick="openPeople()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Pessoas &amp; empresas</button>
       <button onclick="exportJSON()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Backup (.json)</button>
       <button class="reset" onclick="resetAll()">Limpar tudo</button>
     </div>
@@ -474,9 +468,15 @@
 const SUPABASE_URL='https://ydfocnclwunnskznrhja.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_ZqcFVrOwKhfipKbFSNaGlg_YYo6tv81';
 const MANAGER_EMAILS=['lucas.baldim@tclsemp.com.br'];
-// Anon key do Controle de PO (uryzzerzmmuwuqxjwwec) — cole aqui a mesma chave que está
-// nas primeiras linhas do arquivo controle-po/index.html (const SUPABASE_ANON_KEY=...)
+
+// ===== SSO COM PO CONTROL =====
+// Projeto separado (uryzzerzmmuwuqxjwwec)
+const PO_URL='https://uryzzerzmmuwuqxjwwec.supabase.co';
 const PO_ANON_KEY='sb_publishable_6DGDsBzRZoT1LQwRr3UCUQ_EHmh-B3J';
+// Senha em mem\u00f3ria para SSO silencioso com o PO Control (limpa ap\u00f3s uso)
+let _senhaAtual='';
+let _poSSODone=false;
+
 const useSb=!!(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase);
 let SB=null,currentUser=null,isManager=false,booted=false;
 if(useSb){try{SB=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){console.error('Supabase init:',e);}}
@@ -517,9 +517,11 @@ async function doLogin(){
   if(!useSb||!SB)return;
   const email=($('#liEmail').value||'').trim().toLowerCase(),senha=$('#liSenha').value||'';
   if(!email||!senha){showGate('Informe e-mail e senha.');return;}
+  // Guarda senha em mem\u00f3ria para SSO silencioso com o PO Control
+  _senhaAtual=senha;
   showGate('Entrando...');
   const {error}=await SB.auth.signInWithPassword({email,password:senha});
-  if(error){console.error('[auth] login:',error);showGate('E-mail ou senha inv\u00e1lidos.');}
+  if(error){console.error('[auth] login:',error);_senhaAtual='';showGate('E-mail ou senha inv\u00e1lidos.');}
 }
 async function sendCode(){
   const email=($('#caEmail').value||'').trim().toLowerCase();
@@ -534,10 +536,10 @@ async function setPassword(){
   const email=($('#caEmail').value||'').trim().toLowerCase(),codigo=($('#caCode').value||'').trim(),senha=$('#caSenha').value||'';
   if(!codigo||senha.length<6){showGate('Informe o c\u00f3digo e uma senha de ao menos 6 caracteres.');return;}
   const j=await fnCall('definir',{email,codigo,senha});
-  if(j&&j.ok){showGate('Senha definida! Entrando...');const {error}=await SB.auth.signInWithPassword({email,password:senha});if(error)showGate('Senha criada, mas o login falhou \u2014 tente entrar manualmente.');}
+  if(j&&j.ok){showGate('Senha definida! Entrando...');_senhaAtual=senha;const {error}=await SB.auth.signInWithPassword({email,password:senha});if(error){_senhaAtual='';showGate('Senha criada, mas o login falhou \u2014 tente entrar manualmente.');}}
   else showGate((j&&j.error)||'C\u00f3digo inv\u00e1lido ou expirado.');
 }
-async function signOut(){if(useSb&&SB){try{await SB.auth.signOut();}catch(e){}}booted=false;location.reload();}
+async function signOut(){if(useSb&&SB){try{await SB.auth.signOut();}catch(e){}}_senhaAtual='';booted=false;location.reload();}
 function showGate(msg){const g=$('#authGate');if(g){g.classList.add('show');if(msg){const e=$('#gateMsg');if(e)e.textContent=msg;}}}
 function hideGate(){const g=$('#authGate');if(g)g.classList.remove('show');}
 async function boot(){
@@ -558,7 +560,7 @@ async function boot(){
   SB.auth.onAuthStateChange((ev,sess)=>{
     console.log('[auth] evento:',ev,'| sess\u00e3o?',!!(sess&&sess.user),'|',(sess&&sess.user&&sess.user.email)||'');
     if(sess&&sess.user){if(!booted)setTimeout(()=>onSignedIn(sess.user),0);}
-    else if(ev==='SIGNED_OUT'){booted=false;showGate('Sua sess\u00e3o foi encerrada pelo servidor. Veja o console (F12) para o motivo e tente novamente.');}
+    else if(ev==='SIGNED_OUT'){booted=false;_senhaAtual='';showGate('Sua sess\u00e3o foi encerrada pelo servidor. Veja o console (F12) para o motivo e tente novamente.');}
   });
 }
 async function onSignedIn(user){
@@ -569,6 +571,63 @@ async function onSignedIn(user){
   try{await init();}catch(e){console.error('[init] falhou (mas a sess\u00e3o segue v\u00e1lida):',e);}
   applyRole();
 }
+
+// ===== SSO SILENCIOSO COM O PO CONTROL =====
+async function checkPOAccess(email){
+  const navPO=$('#navPOControl');if(!navPO)return;
+  if(!PO_ANON_KEY||!PO_URL)return;
+  try{
+    // 1. Verifica se o e-mail tem acesso ao PO Control
+    const r=await fetch(PO_URL+'/rest/v1/rpc/tem_acesso',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':PO_ANON_KEY,'Authorization':'Bearer '+PO_ANON_KEY},
+      body:JSON.stringify({p_email:(email||'').toLowerCase()})
+    });
+    const result=await r.json();
+    if(result!==true){console.log('[PO SSO] sem acesso ao PO Control para',email);return;}
+    navPO.classList.remove('hide');
+    // 2. SSO silencioso: loga no PO Control com as mesmas credenciais
+    //    O token fica salvo no localStorage do dom\u00ednio (lil-bucket.github.io),
+    //    que o iframe herda automaticamente
+    if(!_poSSODone&&_senhaAtual){
+      _poSSODone=true;
+      console.log('[PO SSO] iniciando login silencioso no PO Control...');
+      try{
+        const SBPO=window.supabase.createClient(PO_URL,PO_ANON_KEY,{auth:{storageKey:'sb-uryzzerzmmuwuqxjwwec-auth-token'}});
+        const {data,error}=await SBPO.auth.signInWithPassword({email:(email||'').toLowerCase(),password:_senhaAtual});
+        if(error){
+          console.warn('[PO SSO] login silencioso falhou (iframe pedir\u00e1 login):',error.message);
+          _poSSODone=false;
+        } else {
+          console.log('[PO SSO] \u2713 sess\u00e3o PO Control estabelecida para',email);
+          _senhaAtual=''; // limpa da mem\u00f3ria ap\u00f3s uso bem-sucedido
+        }
+      }catch(e){console.warn('[PO SSO] exce\u00e7\u00e3o:',e);_poSSODone=false;}
+    }
+  }catch(e){console.warn('[PO link] check falhou:',e);}
+}
+
+/* ===== CONTROLE DE PO (iframe embutido) ===== */
+let poLoaded=false;
+function renderPO(){
+  const el=$('#view-po');if(!el)return;
+  el.style.cssText='padding:0;overflow:hidden;flex:1;display:flex;flex-direction:column';
+  if(!poLoaded){
+    poLoaded=true;
+    const ssoInfo=_poSSODone
+      ?'<span style="color:var(--green);font-weight:700;margin-left:6px">\u2713 Login autom\u00e1tico ativo</span>'
+      :'';
+    el.innerHTML=`
+      <div style="background:var(--paper-2);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <span style="font-size:13px;color:var(--txt-3);font-weight:600">Controle de PO \u2014 TCL SEMP${ssoInfo}</span>
+        <a href="https://lil-bucket.github.io/controle-po/" target="_blank" style="font-size:12px;color:var(--accent);font-weight:600;text-decoration:none">Abrir em nova aba \u2197</a>
+      </div>
+      <iframe src="https://lil-bucket.github.io/controle-po/"
+        style="flex:1;width:100%;border:none;display:block"
+        title="Controle de PO"></iframe>`;
+  }
+}
+async function acctMenu(){if(!useSb)return;if(confirm('Sair da conta '+((currentUser&&currentUser.email)||'')+'?'))signOut();}
 const STAGES=[{id:'briefing',name:'Briefing',color:'#8b8d95'},{id:'producao',name:'Em Produ\u00e7\u00e3o',color:'#2f6fd8'},{id:'revisao',name:'Revis\u00e3o/Aprova\u00e7\u00e3o',color:'#d68a04'},{id:'ajustes',name:'Ajustes',color:'#6d4bd1'},{id:'entrega',name:'Veicula\u00e7\u00e3o/Entrega',color:'#16a06a'},{id:'concluido',name:'Conclu\u00eddo',color:'#5d6068'}];
 const STATUS=[{id:'no_prazo',name:'No prazo',cls:'s-green'},{id:'atencao',name:'Aten\u00e7\u00e3o',cls:'s-amber'},{id:'atrasado',name:'Atrasado',cls:'s-red'},{id:'bloqueado',name:'Bloqueado',cls:'s-violet'},{id:'concluido',name:'Conclu\u00eddo',cls:'s-blue'}];
 const TYPES=[
@@ -664,42 +723,8 @@ function applyRole(){
     const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
     if(me){const fr=$('#fResp');if(fr){fr.value=me.nome;render();}}
   }
-  // Verifica acesso ao PO Control de forma assíncrona
   if(useSb&&currentUser)checkPOAccess(currentUser.email);
 }
-async function checkPOAccess(email){
-  const navPO=$('#navPOControl');if(!navPO)return;
-  if(!PO_ANON_KEY||PO_ANON_KEY.startsWith('COLE_'))return; // placeholder não preenchido
-  try{
-    const r=await fetch('https://uryzzerzmmuwuqxjwwec.supabase.co/rest/v1/rpc/tem_acesso',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':PO_ANON_KEY,'Authorization':'Bearer '+PO_ANON_KEY},
-      body:JSON.stringify({p_email:(email||'').toLowerCase()})
-    });
-    const result=await r.json();
-    if(result===true)navPO.classList.remove('hide');
-  }catch(e){console.warn('[PO link] check falhou:',e);}
-}
-
-/* ===== CONTROLE DE PO (iframe embutido) ===== */
-let poLoaded=false;
-function renderPO(){
-  const el=$('#view-po');if(!el)return;
-  // Remove hide e ajusta display (o .hide usa display:none!important)
-  el.style.cssText='padding:0;overflow:hidden;flex:1;display:flex;flex-direction:column';
-  if(!poLoaded){
-    poLoaded=true;
-    el.innerHTML=`
-      <div style="background:var(--paper-2);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-        <span style="font-size:13px;color:var(--txt-3);font-weight:600">Controle de PO — TCL SEMP · O login já está ativo</span>
-        <a href="https://lil-bucket.github.io/controle-po/" target="_blank" style="font-size:12px;color:var(--accent);font-weight:600;text-decoration:none">Abrir em nova aba ↗</a>
-      </div>
-      <iframe src="https://lil-bucket.github.io/controle-po/"
-        style="flex:1;width:100%;border:none;display:block"
-        title="Controle de PO"></iframe>`;
-  }
-}
-async function acctMenu(){if(!useSb)return;if(confirm('Sair da conta '+((currentUser&&currentUser.email)||'')+'?'))signOut();}
 function filtered(){const r=$('#fResp').value,s=$('#fStatus').value;return DB.projects.filter(p=>(!r||p.resp===r)&&(!s||p.status===s));}
 async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;normTeam();if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}try{myActs=await loadMyActs();}catch(e){console.error('[minhas-ativ] load inicial:',e);}try{demandas=await loadDemandas();}catch(e){console.error('[demandas] load inicial:',e);}buildFilters();bindNav();render();applyRole();if(useSb){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);}}
 function buildFilters(){const fr=$('#fResp');fr.innerHTML='<option value="">Todos respons\u00e1veis</option>';DB.team.forEach(t=>fr.innerHTML+=`<option value="${esc(t.nome)}">${esc(t.nome)}${t.empresa?' \u00b7 '+esc(t.empresa):''}</option>`);const fs=$('#fStatus');fs.innerHTML='<option value="">Todos status</option>';STATUS.forEach(s=>fs.innerHTML+=`<option value="${s.id}">${s.name}</option>`);}
@@ -808,7 +833,6 @@ function atvListHTML(){
       </div></div>`;
     }
     const {cls,label}=actDue(t);
-    // Demanda inline form
     const showDmdForm=(_openDmdAtvId===t.id&&!t.demandaId);
     const targets=getDemandaTargets();
     const tOpts=targets.length?[`<option value="">Selecione...</option>`,...targets.map(p=>`<option value="${esc(p.nome)}">${esc(p.nome)}${p.empresa?' \u00b7 '+esc(p.empresa):''}</option>`)].join(''):'<option>Nenhum dispon\u00edvel</option>';
@@ -839,7 +863,6 @@ function atvListHTML(){
 function renderAtividades(){
   const el=$('#view-atividades');if(!el)return;
   const total=myActs.length,abertas=myActs.filter(a=>!a.feito).length,feitas=total-abertas;
-  const dmdAbertasCount=demandas.filter(d=>{const n=getMyName();return (d.de===n||d.para===n)&&d.status==='aberta';}).length;
   el.innerHTML=`
    <div class="panel">
      <div class="panel-h"><h3>\ud83d\udccc Nova atividade</h3><span class="tag">privado \u00b7 s\u00f3 voc\u00ea v\u00ea</span></div>
@@ -1053,7 +1076,7 @@ function openModal(pid){
           <div class="tt-actions"><button class="mini-btn" onclick="applyTemplate()">Aplicar modelo</button><button class="mini-btn" onclick="refitTasks()">Reagendar pela entrega</button><button class="mini-btn dark" onclick="taskAdd()">+ Atividade</button></div></div>
           <div class="task-list" id="taskList"></div></div>
         <div style="font-size:11.5px;color:var(--txt-3);margin-top:7px">Marque a atividade para o % subir. Defina o <b>per\u00edodo</b> (in\u00edcio \u2192 fim) de cada atividade. "Reagendar pela entrega" redistribui os per\u00eddos para fechar entre o in\u00edcio e a data de entrega do projeto.</div></div>
-      <div class="field full"><label>Status & atualiza\u00e7\u00f5es \u2014 use <b>@Nome</b> para marcar algu\u00e9m do time (envia e-mail de notifica\u00e7\u00e3o)</label>
+      <div class="field full"><label>Status &amp; atualiza\u00e7\u00f5es \u2014 use <b>@Nome</b> para marcar algu\u00e9m do time (envia e-mail de notifica\u00e7\u00e3o)</label>
         <div class="log-autor-bar">Registrando como: <b id="logAutorName">\u2014</b></div>
         <div id="pessoasEnvolvidasWrap" style="display:none">
           <div style="font-size:11.5px;color:var(--txt-3);margin-bottom:5px">Mencionados neste projeto:</div>
@@ -1077,9 +1100,7 @@ function openModal(pid){
   $('#f_tipo').addEventListener('change',function(){if(!modalTasks.length||modalTasks.every(t=>!t.done))applyTemplate(true);});
   renderTaskList();renderLogList();
   setTimeout(()=>setupMentionInput(),50);
-  // Auto-fill autor do log com o usuário logado
   const lan=$('#logAutorName');if(lan)lan.textContent=getLogAutor();
-  // Pessoas envolvidas (mencionadas nos logs)
   renderPessoasEnvolvidas(modalLogs);
 }
 function closeModal(){$('#modalMount').innerHTML='';editingId=null;modalTasks=[];modalLogs=[];}
@@ -1171,7 +1192,7 @@ function renderPeopleModal(){
       <input class="pr-mail" value="${esc(p.email||'')}" oninput="peopleDraft[${i}].email=this.value" placeholder="E-mail corporativo (login, status di\u00e1rio e @mention)">
       <button class="t-del" onclick="removePerson(${i})" title="Remover">\u2715</button></div>`).join(''):'<div class="td-sub" style="padding:8px 2px">Nenhuma pessoa cadastrada ainda.</div>';
   $('#modalMount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:560px">
-    <div class="modal-h"><h3>Pessoas & empresas</h3><button class="x" onclick="closeModal()">\u2715</button></div>
+    <div class="modal-h"><h3>Pessoas &amp; empresas</h3><button class="x" onclick="closeModal()">\u2715</button></div>
     <div class="modal-b">${dl}
       <div style="font-size:12.5px;color:var(--txt-2);margin-bottom:16px;line-height:1.5">Cadastre todos os envolvidos \u2014 equipe interna, ag\u00eancias e parceiros. O <b>e-mail corporativo</b> \u00e9 usado no login, no status di\u00e1rio e nas notifica\u00e7\u00f5es de @men\u00e7\u00e3o.</div>
       <div class="field" style="margin-bottom:18px"><label>Nossa empresa (interna) \u2014 tudo fora dela conta como ag\u00eancia/\u00e1rea externa</label><input id="pp_interna" list="empresasDL" value="${esc(DB.empresaInterna||'')}" placeholder="Ex.: TCL"></div>
@@ -1186,310 +1207,214 @@ async function savePeople(){const interna=$('#pp_interna')?$('#pp_interna').valu
 function exportJSON(){const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='painel-projetos-backup.json';a.click();toast('Backup baixado \u2713');}
 async function resetAll(){if(!confirm('Isso apaga TODOS os projetos e recarrega o exemplo. Continuar?'))return;DB=seed();await saveAll(DB);buildFilters();render();toast('Painel resetado');}
 let toastTimer;function toast(m){const t=$('#toast');t.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>'+m;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400);}
-
-/* ===== CONVITE DE USUARIO ===== */
-function openInviteModal(){
-  if(!isManager||!useSb){toast('Dispon\u00edvel apenas para o gestor com Supabase conectado.');return;}
-  $('#modalMount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:420px">
-    <div class="modal-h"><h3>\u2709\ufe0f Convidar pessoa para o painel</h3><button class="x" onclick="closeModal()">\u2715</button></div>
+async function openInviteModal(){
+  if(!useSb||!SB||!isManager){toast('Apenas gestores podem convidar.');return;}
+  $('#modalMount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:400px">
+    <div class="modal-h"><h3>Convidar pessoa</h3><button class="x" onclick="closeModal()">\u2715</button></div>
     <div class="modal-b">
-      <p style="font-size:13px;color:var(--txt-2);margin-bottom:20px;line-height:1.6">A pessoa receber\u00e1 um e-mail com um <b>c\u00f3digo de 6 d\u00edgitos</b> para criar a senha e acessar o painel.<br><br>Ap\u00f3s receber, ela deve clicar em <b>"Primeiro acesso"</b> na tela de login, informar o e-mail e o c\u00f3digo.</p>
-      <div class="field full"><label>E-mail corporativo da pessoa</label><input id="inv_email" type="email" placeholder="nome@tclsemp.com.br" onkeydown="if(event.key==='Enter')sendInvite()"></div>
-      <div id="inv_msg" style="font-size:12.5px;min-height:20px;margin-top:4px;padding:0 2px"></div>
+      <div class="field full"><label>E-mail corporativo (recebers\u00e1 um c\u00f3digo para criar senha)</label><input id="invEmail" class="" type="email" placeholder="nome@tclsemp.com.br" style="width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:var(--paper-2);font:inherit;outline:none"></div>
+      <div id="invMsg" style="font-size:13px;color:var(--txt-2);min-height:18px"></div>
     </div>
     <div class="modal-f"><div></div><div class="right"><button class="btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn-save" onclick="sendInvite()">Enviar convite</button></div></div>
-  </div></div>`;
-  setTimeout(()=>{const e=$('#inv_email');if(e)e.focus();},60);
-}
+  </div></div>`;}
 async function sendInvite(){
-  const emailEl=$('#inv_email');const msgEl=$('#inv_msg');
-  const email=(emailEl?emailEl.value:'').trim().toLowerCase();
-  if(!email){if(msgEl)msgEl.innerHTML='<span style="color:var(--red)">Informe o e-mail.</span>';return;}
-  if(msgEl)msgEl.innerHTML='<span style="color:var(--txt-3)">Enviando convite...</span>';
+  const email=($('#invEmail').value||'').trim().toLowerCase();
+  if(!email){$('#invMsg').textContent='Informe o e-mail.';return;}
+  $('#invMsg').textContent='Enviando...';
   const j=await fnCall('convidar',{email});
-  if(j&&j.ok){
-    if(msgEl)msgEl.innerHTML=`<span style="color:var(--green)">\u2713 Convite enviado para <b>${esc(email)}</b>. A pessoa deve verificar a caixa de entrada (e o spam).</span>`;
-    toast('Convite enviado \u2713');setTimeout(closeModal,2500);
-  } else {
-    if(msgEl)msgEl.innerHTML=`<span style="color:var(--red)">${esc((j&&j.error)||'Erro ao enviar convite.')}</span>`;
-  }
+  if(j&&j.ok){$('#invMsg').style.color='var(--green)';$('#invMsg').textContent='\u2713 Convite enviado para '+email;}
+  else{$('#invMsg').style.color='var(--red)';$('#invMsg').textContent=(j&&j.error)||'Falha ao enviar convite.';}
 }
-
-/* ===== @MENTION NO LOG ===== */
-let _mentionOpen=false;
-function mentionOpen(){return _mentionOpen;}
+function mentionOpen(){return !!(document.querySelector('.mention-drop.show'));}
 function setupMentionInput(){
-  const inp=$('#f_log');const drop=$('#mentionDrop');
-  if(!inp||!drop)return;
-  inp.addEventListener('input',()=>{
-    const val=inp.value,cur=inp.selectionStart||0;
-    const before=val.slice(0,cur);
-    const atIdx=before.lastIndexOf('@');
-    if(atIdx>=0&&(atIdx===0||/\s/.test(before[atIdx-1]))){
-      const q=before.slice(atIdx+1).toLowerCase();
-      const opts=DB.team.filter(p=>p.nome.toLowerCase().includes(q)).slice(0,8);
-      if(opts.length){
-        _mentionOpen=true;
-        drop.innerHTML=opts.map(p=>`<div class="mention-opt" data-nome="${esc(p.nome)}" onmousedown="event.preventDefault();insertMention('${esc(p.nome.replace(/\\/g,'\\\\').replace(/'/g,"\\'"))}')"><div class="avatar" style="background:${avColor(p.nome)};width:26px;height:26px;font-size:11px;border-radius:50%">${initials(p.nome)}</div><span>${esc(p.nome)}</span>${p.email?`<span style="font-size:11px;color:var(--txt-3);margin-left:auto">${esc(p.email)}</span>`:''}</div>`).join('');
-        drop.classList.add('show');return;
-      }
-    }
-    _mentionOpen=false;drop.classList.remove('show');
-  });
-  inp.addEventListener('keydown',e=>{
-    if(!drop.classList.contains('show'))return;
-    const opts=drop.querySelectorAll('.mention-opt');
-    let cur=drop.querySelector('.mention-opt.active');
-    if(e.key==='ArrowDown'){e.preventDefault();if(!cur){if(opts[0])opts[0].classList.add('active');}else{cur.classList.remove('active');const n=cur.nextElementSibling;if(n)n.classList.add('active');}}
-    else if(e.key==='ArrowUp'){e.preventDefault();if(cur){cur.classList.remove('active');const p=cur.previousElementSibling;if(p)p.classList.add('active');}}
-    else if(e.key==='Enter'&&cur){e.preventDefault();insertMention(cur.dataset.nome);}
-    else if(e.key==='Escape'){_mentionOpen=false;drop.classList.remove('show');}
-  });
-  inp.addEventListener('blur',()=>{setTimeout(()=>{_mentionOpen=false;drop.classList.remove('show');},180);});
+  const inp=$('#f_log');const drop=$('#mentionDrop');if(!inp||!drop)return;
+  let atStart=-1;let actIdx=-1;const opts=DB.team.map(p=>p.nome);
+  function showDrop(q){
+    const fil=opts.filter(n=>n.toLowerCase().includes(q.toLowerCase()));
+    if(!fil.length){drop.classList.remove('show');return;}
+    drop.innerHTML=fil.map((n,i)=>`<div class="mention-opt" data-n="${esc(n)}">${esc(n)}</div>`).join('');
+    drop.classList.add('show');actIdx=-1;
+    drop.querySelectorAll('.mention-opt').forEach(el=>el.addEventListener('mousedown',e=>{e.preventDefault();insertMention(el.dataset.n,inp,atStart);}));
+  }
+  inp.addEventListener('input',()=>{const v=inp.value,c=inp.selectionStart;let at=-1;for(let i=c-1;i>=0;i--){if(v[i]==='@'){at=i;break;}if(/\s/.test(v[i]))break;}if(at>=0){atStart=at;showDrop(v.slice(at+1,c));}else{atStart=-1;drop.classList.remove('show');}});
+  inp.addEventListener('keydown',e=>{if(!drop.classList.contains('show'))return;const items=drop.querySelectorAll('.mention-opt');if(e.key==='ArrowDown'){e.preventDefault();actIdx=(actIdx+1)%items.length;items.forEach((el,i)=>el.classList.toggle('active',i===actIdx));}else if(e.key==='ArrowUp'){e.preventDefault();actIdx=(actIdx-1+items.length)%items.length;items.forEach((el,i)=>el.classList.toggle('active',i===actIdx));}else if(e.key==='Enter'&&actIdx>=0){e.preventDefault();insertMention(items[actIdx].dataset.n,inp,atStart);}else if(e.key==='Escape'){drop.classList.remove('show');}});
+  document.addEventListener('click',e=>{if(!drop.contains(e.target)&&e.target!==inp)drop.classList.remove('show');},{once:false});
 }
-function insertMention(nome){
-  const inp=$('#f_log');if(!inp)return;
-  const val=inp.value,cur=inp.selectionStart||0;
-  const before=val.slice(0,cur);
-  const atIdx=before.lastIndexOf('@');
-  if(atIdx<0)return;
-  const after=val.slice(cur);
-  const newVal=before.slice(0,atIdx)+'@'+nome+' '+after;
-  inp.value=newVal;
-  const pos=atIdx+nome.length+2;
-  inp.focus();inp.setSelectionRange(pos,pos);
-  const drop=$('#mentionDrop');if(drop)drop.classList.remove('show');
-  _mentionOpen=false;
+function insertMention(name,inp,atStart){
+  const v=inp.value,c=inp.selectionStart;
+  const before=v.slice(0,atStart),after=v.slice(c);
+  const ins='@'+name+' ';inp.value=before+ins+after;inp.selectionStart=inp.selectionEnd=atStart+ins.length;
+  const drop=$('#mentionDrop');if(drop)drop.classList.remove('show');inp.focus();
 }
 function extractMentions(txt){
-  const matches=(txt||'').match(/@([\w\u00C0-\u00FF][^\s@,;.!?\u2014]*)/g)||[];
-  const results=[];
-  matches.forEach(m=>{
-    const q=m.slice(1).trim();
-    const found=DB.team.find(p=>p.nome.toLowerCase()===q.toLowerCase()||p.nome.toLowerCase().startsWith(q.toLowerCase()));
-    if(found&&!results.includes(found.nome))results.push(found.nome);
-  });
-  return results;
-}
-async function sendMentionNotif(mentions,projetoNome,texto,autor){
-  if(!useSb||!SB||!mentions.length)return;
-  const emails=mentions.map(nome=>{const p=DB.team.find(x=>x.nome===nome);return p&&p.email?p.email:null;}).filter(Boolean);
-  if(!emails.length){console.log('[mention] pessoas marcadas sem e-mail:',mentions);return;}
-  try{
-    const r=await fetch(SUPABASE_URL+'/functions/v1/acesso',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},body:JSON.stringify({action:'mencionar',emails,projeto:projetoNome,texto,autor:autor||''})});
-    const j=await r.json();
-    if(j&&j.ok)toast('Notifica\u00e7\u00e3o enviada para '+mentions.join(', ')+' \u2713');
-    else console.warn('[mention] resposta:',j);
-  }catch(e){console.error('[mention] erro:',e);}
-}
-
-/* ===== ENVIAR STATUS POR E-MAIL ===== */
-async function sendStatusEmail(){
-  if(!useSb){toast('Dispon\u00edvel apenas com Supabase conectado.');return;}
-  toast('Enviando status por e-mail...');
-  try{
-    const r=await fetch(SUPABASE_URL+'/functions/v1/daily-status?force=1',{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json'}});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok)toast('Status enviado por e-mail \u2713');
-    else toast('Erro: '+((j&&(j.error||j.message))||'verifique a Edge Function daily-status'));
-  }catch(e){console.error('[send-status]',e);toast('N\u00e3o foi poss\u00edvel chamar a Edge Function.');}
-}
-
-/* ===== AUTOR DO LOG (usuário logado) ===== */
-function getLogAutor(){
-  if(currentUser&&currentUser.email){
-    const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
-    if(me)return me.nome;
-    // fallback: parte antes do @ do e-mail
-    return currentUser.email.split('@')[0];
+  const found=[];const re=/@([^\s@,;.!?\u2014]+)/g;let m;
+  while((m=re.exec(txt))!==null){
+    const name=m[1];const person=DB.team.find(p=>p.nome.toLowerCase()===name.toLowerCase());
+    if(person&&person.email)found.push({nome:person.nome,email:person.email});
   }
-  return 'Equipe';
+  return [...new Map(found.map(x=>[x.email,x])).values()];
 }
-
-/* ===== PESSOAS ENVOLVIDAS NO PROJETO (via @mentions nos logs) ===== */
+async function sendMentionNotif(mentions,projNome,txt,autor){
+  if(!useSb||!SB||!mentions.length)return;
+  for(const p of mentions){
+    try{
+      await SB.from('mencoes').insert({projeto_nome:projNome,autor:autor||'Algu\u00e9m',destinatario_email:p.email,destinatario_nome:p.nome,mensagem:txt,criado_em:new Date().toISOString()});
+    }catch(e){console.warn('[mention] insert falhou:',e);}
+  }
+}
+async function sendStatusEmail(){
+  if(!useSb||!SB){toast('Recurso dispon\u00edvel apenas no modo online.');return;}
+  const txt=buildStatusText();
+  const hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  const assunto='Status Semanal \u2014 '+hoje;
+  try{
+    const {error}=await SB.functions.invoke('daily-status',{body:{force:true,override_text:txt,assunto}});
+    if(error){console.error('[status-email]',error);toast('\u26a0\ufe0f Erro ao enviar e-mail. Verifique o console.');}
+    else toast('\ud83d\udce7 Status enviado por e-mail!');
+  }catch(e){console.error('[status-email] exce\u00e7\u00e3o:',e);toast('\u26a0\ufe0f Falha ao chamar a fun\u00e7\u00e3o. Verifique o console.');}
+}
+function getLogAutor(){
+  if(useSb&&currentUser){
+    const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
+    if(me&&me.nome)return me.nome;
+    if(currentUser.user_metadata&&currentUser.user_metadata.full_name)return currentUser.user_metadata.full_name;
+    const em=currentUser.email||'';return em.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  }
+  return DB.team[0]?DB.team[0].nome:'Usu\u00e1rio';
+}
 function renderPessoasEnvolvidas(logs){
-  const wrap=$('#pessoasEnvolvidasWrap');const el=$('#envolvidos');
-  if(!wrap||!el)return;
-  const nomes=new Set();
-  (logs||[]).forEach(l=>{
-    const m=(l.txt||'').match(/@([\w\u00C0-\u00FF][^\s@,;.!?\u2014]*)/g)||[];
-    m.forEach(match=>{
-      const q=match.slice(1).trim();
-      const found=DB.team.find(p=>p.nome.toLowerCase()===q.toLowerCase()||p.nome.toLowerCase().startsWith(q.toLowerCase()));
-      if(found)nomes.add(found.nome);
-    });
-  });
-  if(!nomes.size){wrap.style.display='none';return;}
+  const wrap=$('#pessoasEnvolvidasWrap');const cont=$('#envolvidos');if(!wrap||!cont)return;
+  const all=new Map();
+  logs.forEach(l=>{extractMentions(l.txt).forEach(p=>{all.set(p.email,p);});});
+  if(!all.size){wrap.style.display='none';return;}
   wrap.style.display='block';
-  el.innerHTML=[...nomes].map(nome=>`<span class="env-chip"><span class="av-xs" style="background:${avColor(nome)}">${initials(nome)}</span>${esc(nome)}</span>`).join('');
+  cont.innerHTML=[...all.values()].map(p=>`<div class="env-chip"><div class="av-xs" style="background:${avColor(p.nome)}">${initials(p.nome)}</div>${esc(p.nome)}</div>`).join('');
 }
-
-/* ===== SUBATIVIDADES ===== */
-/* ===== SUBITENS NOS PROJETOS (dentro do modal de tarefas) ===== */
 function addTaskSub(taskIdx){
-  const t=modalTasks[taskIdx];if(!t)return;
-  if(!t.subs)t.subs=[];
-  const nid=id();
-  t.subs.push({id:nid,titulo:'',feito:false});
+  const t=modalTasks[taskIdx];if(!t.subs)t.subs=[];
+  t.subs.push({id:id(),titulo:'',feito:false});
   renderTaskList();
-  setTimeout(()=>{const el=document.querySelector(`[data-tsub="${nid}"]`);if(el){el.focus();}},40);
+  setTimeout(()=>{const inputs=document.querySelectorAll(`[data-tsub]`);const last=inputs[inputs.length-1];if(last)last.focus();},30);
 }
 function toggleTaskSub(taskIdx,subId){
-  const t=modalTasks[taskIdx];if(!t)return;
-  const s=(t.subs||[]).find(x=>x.id===subId);if(!s)return;
-  s.feito=!s.feito;renderTaskList();
+  const t=modalTasks[taskIdx];if(!t.subs)return;
+  const s=t.subs.find(x=>x.id===subId);if(s)s.feito=!s.feito;
+  renderTaskList();
 }
 function delTaskSub(taskIdx,subId){
-  const t=modalTasks[taskIdx];if(!t)return;
-  t.subs=(t.subs||[]).filter(x=>x.id!==subId);renderTaskList();
+  const t=modalTasks[taskIdx];if(!t.subs)return;
+  t.subs=t.subs.filter(x=>x.id!==subId);
+  renderTaskList();
 }
 function updateTaskSubTitle(taskIdx,subId,val){
-  const t=modalTasks[taskIdx];if(!t)return;
-  const s=(t.subs||[]).find(x=>x.id===subId);if(s)s.titulo=val;
+  const t=modalTasks[taskIdx];if(!t.subs)return;
+  const s=t.subs.find(x=>x.id===subId);if(s)s.titulo=val;
 }
-
-/* ===== DEMANDAS ===== */
 let _openDmdAtvId=null;
-function abrirDemandaForm(atvId){_openDmdAtvId=atvId;refreshActs();}
-
-async function createDemandaFromAtv(atvId){
-  const t=myActs.find(x=>x.id===atvId);if(!t)return;
-  const paraSel=$('#dmdPara_'+atvId);
-  const para=paraSel?paraSel.value:'';
-  if(!para){toast('Selecione o respons\u00e1vel.');return;}
-  const de=getMyName()||'Equipe';
-  const dId=id();
-  demandas.unshift({id:dId,titulo:t.titulo,desc:t.desc||'',prazo:t.prazo||'',para,de,status:'aberta',criadoEm:new Date().toISOString().slice(0,10)});
-  t.demandaId=dId;t.demandaPara=para;
-  _openDmdAtvId=null;
-  await Promise.all([saveDemandas(),saveMyActs()]);
-  refreshActs();refreshDemandas();
-  toast('Demanda criada \u2713');
-}
-
-async function cancelarDemanda(atvId){
-  const t=myActs.find(x=>x.id===atvId);if(!t||!t.demandaId)return;
-  if(!confirm('Cancelar esta demanda?'))return;
-  const d=demandas.find(x=>x.id===t.demandaId);
-  if(d)d.status='cancelada';
-  delete t.demandaId;delete t.demandaPara;
-  await Promise.all([saveDemandas(),saveMyActs()]);
-  refreshActs();refreshDemandas();
-  toast('Demanda cancelada.');
-}
-
+function abrirDemandaForm(atvId){_openDmdAtvId=atvId;const el=$('#atvList');if(el)el.innerHTML=atvListHTML();}
 async function loadDemandas(){
-  if(useSb&&SB){
+  if(useSb&&SB&&currentUser){
     try{
-      const {data,error}=await SB.from('demandas').select('id,data').eq('id','__all__').maybeSingle();
+      const {data,error}=await SB.from('demandas').select('*').or(`criador_id.eq.${currentUser.id},destinatario_id.eq.${currentUser.id}`);
       if(error){console.error('[demandas] load:',error);return [];}
-      return (data&&Array.isArray(data.data))?data.data:[];
-    }catch(e){console.error('[demandas] load ex:',e);return [];}
+      return data||[];
+    }catch(e){console.error('[demandas] load (exce\u00e7\u00e3o):',e);return [];}
   }
-  try{const v=localStorage.getItem('painel:demandas');return v?JSON.parse(v):[];}catch(e){return [];}
+  return [];
 }
-async function saveDemandas(){
-  if(useSb&&SB){
-    try{await SB.from('demandas').upsert({id:'__all__',data:demandas});}
-    catch(e){console.error('[demandas] save:',e);}
-    return;
-  }
-  try{localStorage.setItem('painel:demandas',JSON.stringify(demandas));}catch(e){}
-}
+async function saveDemandas(d){demandas=d;}
 function getMyName(){
-  if(currentUser&&currentUser.email){
-    const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
-    if(me)return me.nome;
-    return currentUser.email.split('@')[0];
-  }
-  return null;
+  if(useSb&&currentUser){const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());return me?me.nome:getLogAutor();}
+  return DB.team[0]?DB.team[0].nome:'';
 }
 function getDemandaTargets(){
-  // Gerente pode enviar para todos
-  if(isManager)return DB.team||[];
-  // Time TCL só pode enviar para agências (empresa diferente da interna)
-  return (DB.team||[]).filter(p=>p.empresa&&p.empresa!==DB.empresaInterna);
+  if(!DB.team)return[];
+  if(isManager)return DB.team.filter(p=>p.nome!==getMyName());
+  const empresaInterna=DB.empresaInterna||'';
+  return DB.team.filter(p=>p.empresa&&p.empresa!==empresaInterna);
 }
-function dmdStatusLabel(s){
-  return {aberta:'Aberta',em_andamento:'Em andamento',concluida:'Conclu\u00edda',cancelada:'Cancelada'}[s]||s;
+function dmdStatusLabel(s){return{aberta:'Aberta',em_andamento:'Em andamento',concluida:'Conclu\u00edda',cancelada:'Cancelada'}[s]||s;}
+async function createDemanda(titulo,desc,para,atvId){
+  if(!useSb||!SB||!currentUser)return null;
+  const destPerson=(DB.team||[]).find(p=>p.nome===para);
+  const destEmail=destPerson?destPerson.email||'':'';
+  if(!destEmail){toast('\u26a0\ufe0f Pessoa sem e-mail cadastrado. Atualize em Pessoas & empresas.');return null;}
+  let destId=null;
+  try{
+    const {data:ua}=await SB.auth.admin.listUsers();
+    if(ua&&ua.users){const du=ua.users.find(u=>u.email&&u.email.toLowerCase()===destEmail.toLowerCase());if(du)destId=du.id;}
+  }catch(e){console.warn('[demanda] n\u00e3o conseguiu resolver destId:',e);}
+  try{
+    const {data,error}=await SB.from('demandas').insert({
+      titulo,descricao:desc,criador_id:currentUser.id,criador_nome:getMyName(),destinatario_id:destId,
+      destinatario_nome:para,destinatario_email:destEmail,status:'aberta',atv_id:atvId||null,
+      criado_em:new Date().toISOString()
+    }).select().single();
+    if(error){console.error('[demanda] insert:',error);toast('\u26a0\ufe0f Erro ao criar demanda: '+error.message);return null;}
+    return data;
+  }catch(e){console.error('[demanda] insert (exce\u00e7\u00e3o):',e);return null;}
 }
-async function createDemanda(){
-  const titulo=($('#dmd_titulo')||{}).value?.trim();
-  const para=($('#dmd_para')||{}).value;
-  const prazo=($('#dmd_prazo')||{}).value||'';
-  const desc=($('#dmd_desc')||{}).value?.trim()||'';
-  if(!titulo){const el=$('#dmd_titulo');if(el){el.focus();el.style.borderColor='var(--red)';}return;}
-  if(!para){toast('Selecione para quem enviar a demanda.');return;}
-  const de=getMyName()||'Equipe';
-  demandas.unshift({id:id(),titulo,desc,prazo,para,de,status:'aberta',criadoEm:new Date().toISOString().slice(0,10)});
-  await saveDemandas();
-  ['dmd_titulo','dmd_para','dmd_prazo','dmd_desc'].forEach(fid=>{const el=$('#'+fid);if(el)el.value='';});
-  const el=$('#dmd_titulo');if(el)el.style.borderColor='';
-  refreshDemandas();toast('Demanda enviada \u2713');
+async function updateDemandaStatus(dmdId,newStatus){
+  if(!useSb||!SB)return;
+  try{
+    const {error}=await SB.from('demandas').update({status:newStatus,atualizado_em:new Date().toISOString()}).eq('id',dmdId);
+    if(error){console.error('[demanda] update:',error);toast('\u26a0\ufe0f Erro ao atualizar demanda.');return;}
+    const d=demandas.find(x=>x.id===dmdId);if(d)d.status=newStatus;
+    renderAtividades();toast('Demanda atualizada \u2713');
+  }catch(e){console.error('[demanda] update (exce\u00e7\u00e3o):',e);}
 }
-async function updateDemandaStatus(dId,status){
-  const d=demandas.find(x=>x.id===dId);if(!d)return;
-  d.status=status;d.atualizadoEm=new Date().toISOString().slice(0,10);
-  await saveDemandas();refreshDemandas();
+async function deleteDemanda(dmdId){
+  if(!useSb||!SB)return;
+  try{
+    const {error}=await SB.from('demandas').delete().eq('id',dmdId);
+    if(error){console.error('[demanda] delete:',error);return;}
+    demandas=demandas.filter(x=>x.id!==dmdId);
+  }catch(e){console.error('[demanda] delete (exce\u00e7\u00e3o):',e);}
 }
-async function deleteDemanda(dId){
-  if(!confirm('Excluir esta demanda?'))return;
-  demandas=demandas.filter(x=>x.id!==dId);
-  await saveDemandas();refreshDemandas();toast('Demanda exclu\u00edda');
-}
-function refreshDemandas(){
-  const el=$('#demandasSection');if(el)el.innerHTML=demandasHTML();
-}
+async function refreshDemandas(){demandas=await loadDemandas();renderAtividades();}
 function demandasHTML(){
-  const myName=getMyName();
-
-  // Separar demandas
-  const enviadas=demandas.filter(d=>d.de===myName&&d.status!=='cancelada');
-  const recebidas=demandas.filter(d=>d.para===myName&&d.status!=='cancelada');
-  const demaisGestor=isManager?demandas.filter(d=>d.de!==myName&&d.para!==myName&&d.status!=='cancelada'):[];
-
-  const dmdCard=(d,canDel)=>{
-    const dd=daysTo(d.prazo);
-    const prazoLabel=!d.prazo?'':(dd<0?`<span style="color:var(--red);font-weight:700">${Math.abs(dd)}d atrasada</span>`:(dd===0?`<span style="color:var(--amber);font-weight:700">vence hoje</span>`:`em ${dd}d`));
-    const statusOpts=['aberta','em_andamento','concluida','cancelada'].map(s=>`<option value="${s}" ${d.status===s?'selected':''}>${dmdStatusLabel(s)}</option>`).join('');
+  if(!useSb||!currentUser)return'';
+  const myId=currentUser.id;
+  const enviadas=demandas.filter(d=>d.criador_id===myId&&d.status!=='cancelada');
+  const recebidas=demandas.filter(d=>d.destinatario_id===myId&&d.status!=='cancelada');
+  const todasDoTime=isManager?demandas.filter(d=>d.status!=='cancelada'):[];
+  const dmdCard=(d,role)=>{
+    const isRec=role==='recebida';const isMan=role==='time';
+    const canUpdate=isRec&&['aberta','em_andamento'].includes(d.status);
+    const canCancel=!isRec&&d.status==='aberta';
     return `<div class="dmd-card ${d.status}">
-      <div class="dmd-header">
-        <span class="dmd-titulo">${esc(d.titulo)}</span>
-        <span class="dmd-badge ${d.status}">${dmdStatusLabel(d.status)}</span>
-      </div>
-      <div class="dmd-meta">
-        <span>\ud83d\udce4 <b>${esc(d.de)}</b> \u2192 \ud83d\udce5 <b>${esc(d.para)}</b></span>
-        ${d.prazo?`<span>\ud83d\udcc5 ${fmtDate(d.prazo)} ${prazoLabel}</span>`:''}
-        <span style="margin-left:auto;font-size:11px;color:var(--txt-3)">criada ${fmtDate(d.criadoEm)}</span>
-      </div>
-      ${d.desc?`<div class="dmd-desc">${esc(d.desc)}</div>`:''}
+      <div class="dmd-header"><div class="dmd-titulo">${esc(d.titulo)}</div><span class="dmd-badge ${d.status}">${dmdStatusLabel(d.status)}</span></div>
+      <div class="dmd-meta"><span>De: <b>${esc(d.criador_nome)}</b></span><span>Para: <b>${esc(d.destinatario_nome)}</b></span>${d.criado_em?`<span>${fmtDate(d.criado_em.slice(0,10))}</span>`:''}</div>
+      ${d.descricao?`<div class="dmd-desc">${esc(d.descricao)}</div>`:''}
       <div class="dmd-footer">
-        <select class="dmd-status-sel" onchange="updateDemandaStatus('${d.id}',this.value)">${statusOpts}</select>
-        ${canDel?`<button class="atv-btn" style="color:var(--red);border-color:var(--red-bg)" onclick="deleteDemanda('${d.id}')">Excluir</button>`:''}
+        ${canUpdate?`<select class="dmd-status-sel" onchange="updateDemandaStatus('${d.id}',this.value)"><option value="aberta" ${d.status==='aberta'?'selected':''}>Aberta</option><option value="em_andamento" ${d.status==='em_andamento'?'selected':''}>Em andamento</option><option value="concluida" ${d.status==='concluida'?'selected':''}>Conclu\u00edda</option></select>`:''}
+        ${canCancel?`<button class="atv-btn" style="color:var(--red);border-color:var(--red-bg)" onclick="cancelarDemanda(null,'${d.id}')">Cancelar</button>`:''}
       </div>
     </div>`;
   };
-
-  const envList=enviadas.length?enviadas.map(d=>dmdCard(d,true)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda ativa enviada.<br><span style="font-size:12px;color:var(--txt-3)">Clique em \ud83d\udce4 Delegar em qualquer atividade acima.</span></div>`;
-  const recList=recebidas.length?recebidas.map(d=>dmdCard(d,false)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda recebida ainda.</div>`;
-  const demaisSection=demaisGestor.length?`
-    <div class="panel" style="margin-top:16px">
-      <div class="panel-h"><h3>\ud83d\udcca Demandas do time (vis\u00e3o gestor)</h3><span class="tag">${demaisGestor.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativas</span></div>
-      <div class="panel-b" style="padding:8px">${demaisGestor.map(d=>dmdCard(d,true)).join('')}</div>
-    </div>`:'';
-
-  return `
-    <div class="panel" style="margin-top:16px">
-      <div class="panel-h"><h3>\ud83d\udce4 Demandas enviadas</h3><span class="tag">${enviadas.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativa(s)</span></div>
-      <div class="panel-b" style="padding:8px">${envList}</div>
-    </div>
-    <div class="panel" style="margin-top:16px">
-      <div class="panel-h"><h3>\ud83d\udce5 Demandas recebidas</h3><span class="tag">${recebidas.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativa(s)</span></div>
-      <div class="panel-b" style="padding:8px">${recList}</div>
-    </div>
-    ${demaisSection}`;
+  const sec=(tit,items,role)=>items.length?`<div class="panel" style="margin-top:14px"><div class="panel-h"><h3>${tit}</h3><span class="tag">${items.length} demanda(s)</span></div><div class="panel-b">${items.map(d=>dmdCard(d,role)).join('')}</div></div>`:'';
+  return sec('\ud83d\udce4 Demandas enviadas',enviadas,'enviada')+sec('\ud83d\udce5 Demandas recebidas',recebidas,'recebida')+(isManager?sec('\ud83d\udc65 Demandas do time (gest\u00e3o)',todasDoTime,'time'):'');
 }
-
+async function createDemandaFromAtv(atvId){
+  const atv=myActs.find(a=>a.id===atvId);if(!atv)return;
+  const sel=$('#dmdPara_'+atvId);if(!sel||!sel.value){toast('\u26a0\ufe0f Selecione quem vai receber.');return;}
+  const para=sel.value;
+  const d=await createDemanda(atv.titulo,atv.desc||'',para,atvId);
+  if(!d)return;
+  atv.demandaId=d.id;atv.demandaPara=para;
+  demandas.push(d);
+  _openDmdAtvId=null;
+  await saveMyActs();renderAtividades();toast('\ud83d\udce4 Demanda criada para '+para+' \u2713');
+}
+async function cancelarDemanda(atvId,dmdIdOverride){
+  const dmdId=dmdIdOverride||(atvId&&myActs.find(a=>a.id===atvId)&&myActs.find(a=>a.id===atvId).demandaId);
+  if(!dmdId)return;
+  if(!confirm('Cancelar esta demanda?'))return;
+  await updateDemandaStatus(dmdId,'cancelada');
+  if(atvId){const atv=myActs.find(a=>a.id===atvId);if(atv){delete atv.demandaId;delete atv.demandaPara;await saveMyActs();}}
+  demandas=demandas.filter(d=>d.id!==dmdId);
+  renderAtividades();toast('Demanda cancelada');
+}
 boot();
 </script>
 </body>
