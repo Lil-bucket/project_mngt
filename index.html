@@ -329,6 +329,32 @@
   .sub-add button{padding:6px 11px;border-radius:7px;background:var(--ink-2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;border:none;white-space:nowrap}
   .sub-add button:hover{background:var(--accent)}
   .sub-count{font-size:11px;font-weight:600;color:var(--txt-3);margin-top:3px}
+  /* DEMANDAS */
+  .dmd-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--line-2)}
+  .dmd-card.aberta{border-left-color:var(--blue)}
+  .dmd-card.em_andamento{border-left-color:var(--amber)}
+  .dmd-card.concluida{border-left-color:var(--green);opacity:.75}
+  .dmd-card.cancelada{border-left-color:var(--slate);opacity:.5}
+  .dmd-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .dmd-titulo{font-size:13.5px;font-weight:600;color:var(--txt);flex:1}
+  .dmd-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+  .dmd-badge.aberta{background:var(--blue-bg);color:var(--blue)}
+  .dmd-badge.em_andamento{background:var(--amber-bg);color:#9c6404}
+  .dmd-badge.concluida{background:var(--green-bg);color:#0c7048}
+  .dmd-badge.cancelada{background:var(--slate-bg);color:#494c54}
+  .dmd-meta{font-size:12px;color:var(--txt-3);margin-bottom:6px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .dmd-meta b{color:var(--txt-2);font-weight:600}
+  .dmd-desc{font-size:13px;color:var(--txt-2);margin-bottom:10px;line-height:1.5}
+  .dmd-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .dmd-status-sel{padding:6px 9px;border:1px solid var(--line-2);border-radius:7px;background:#fff;font-size:12px;cursor:pointer;color:var(--txt-2);font:inherit}
+  .dmd-status-sel:focus{outline:none;border-color:var(--accent)}
+  .dmd-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .dmd-form .full{grid-column:1/-1}
+  .dmd-form label{display:block;font-size:12px;font-weight:600;color:var(--txt-2);margin-bottom:5px}
+  .dmd-form input,.dmd-form select,.dmd-form textarea{width:100%;padding:9px 11px;border:1px solid var(--line-2);border-radius:9px;background:var(--paper-2);font:inherit;font-size:13.5px;color:var(--txt);outline:none;box-sizing:border-box}
+  .dmd-form input:focus,.dmd-form select:focus,.dmd-form textarea:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(255,84,54,.1)}
+  .dmd-form select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' stroke='%238b8d95' stroke-width='1.5' fill='none'/></svg>");background-repeat:no-repeat;background-position:right 11px center}
+  @media(max-width:720px){.dmd-form{grid-template-columns:1fr}}
   /* @MENTION */
   .mention-wrap{position:relative;flex:1;min-width:170px}
   .mention-wrap>input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:#fff;font:inherit;font-size:14px;color:var(--txt);outline:none;box-sizing:border-box}
@@ -561,6 +587,7 @@ const AVATAR_COLORS=['#ff5436','#2f6fd8','#16a06a','#6d4bd1','#d68a04','#e0392b'
 let DB={projects:[],team:[]};
 let activeView='dash',editingId=null,modalTasks=[],modalLogs=[],statusGroup='urgencia',sortKey='prazo',sortDir=1,gestorOn=false;
 let myActs=[];const MYKEY=KEY+'::me';let editAtvId=null;
+let demandas=[];
 const expandedGantt=new Set();
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -676,7 +703,7 @@ function renderPO(){
 }
 async function acctMenu(){if(!useSb)return;if(confirm('Sair da conta '+((currentUser&&currentUser.email)||'')+'?'))signOut();}
 function filtered(){const r=$('#fResp').value,s=$('#fStatus').value;return DB.projects.filter(p=>(!r||p.resp===r)&&(!s||p.status===s));}
-async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;normTeam();if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}try{myActs=await loadMyActs();}catch(e){console.error('[minhas-ativ] load inicial:',e);}buildFilters();bindNav();render();applyRole();if(useSb){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);}}
+async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await saveAll(d);}DB=d;normTeam();if(DB.empresaInterna===undefined){const c={};DB.team.forEach(p=>{if(p.empresa)c[p.empresa]=(c[p.empresa]||0)+1;});DB.empresaInterna=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||'';}try{myActs=await loadMyActs();}catch(e){console.error('[minhas-ativ] load inicial:',e);}try{demandas=await loadDemandas();}catch(e){console.error('[demandas] load inicial:',e);}buildFilters();bindNav();render();applyRole();if(useSb){const sb=$('#syncBtn');if(sb)sb.classList.remove('hide');setInterval(()=>syncFromRemote(true),12000);}}
 function buildFilters(){const fr=$('#fResp');fr.innerHTML='<option value="">Todos respons\u00e1veis</option>';DB.team.forEach(t=>fr.innerHTML+=`<option value="${esc(t.nome)}">${esc(t.nome)}${t.empresa?' \u00b7 '+esc(t.empresa):''}</option>`);const fs=$('#fStatus');fs.innerHTML='<option value="">Todos status</option>';STATUS.forEach(s=>fs.innerHTML+=`<option value="${s.id}">${s.name}</option>`);}
 function bindNav(){document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');activeView=b.dataset.v;
@@ -813,6 +840,7 @@ function atvListHTML(){
 function renderAtividades(){
   const el=$('#view-atividades');if(!el)return;
   const total=myActs.length,abertas=myActs.filter(a=>!a.feito).length,feitas=total-abertas;
+  const dmdAbertasCount=demandas.filter(d=>{const n=getMyName();return (d.de===n||d.para===n)&&d.status==='aberta';}).length;
   el.innerHTML=`
    <div class="panel">
      <div class="panel-h"><h3>\ud83d\udccc Nova atividade</h3><span class="tag">privado \u00b7 s\u00f3 voc\u00ea v\u00ea</span></div>
@@ -828,7 +856,8 @@ function renderAtividades(){
    <div class="panel" style="margin-top:16px">
      <div class="panel-h"><h3>Suas atividades</h3><span class="tag">${abertas} aberta(s) \u00b7 ${feitas} conclu\u00edda(s)</span></div>
      <div class="panel-b"><div id="atvList">${atvListHTML()}</div></div>
-   </div>`;
+   </div>
+   <div id="demandasSection">${demandasHTML()}</div>`;
 }
 function renderDash(){
   const list=filtered();const active=list.filter(p=>p.status!=='concluido');
@@ -1301,6 +1330,160 @@ function toggleSubAtv(parentId,subId){
 function delSubAtv(parentId,subId){
   const t=myActs.find(x=>x.id===parentId);if(!t||!t.subs)return;
   t.subs=t.subs.filter(x=>x.id!==subId);saveMyActs();refreshActs();
+}
+
+/* ===== DEMANDAS ===== */
+async function loadDemandas(){
+  if(useSb&&SB){
+    try{
+      const {data,error}=await SB.from('demandas').select('id,data').eq('id','__all__').maybeSingle();
+      if(error){console.error('[demandas] load:',error);return [];}
+      return (data&&Array.isArray(data.data))?data.data:[];
+    }catch(e){console.error('[demandas] load ex:',e);return [];}
+  }
+  try{const v=localStorage.getItem('painel:demandas');return v?JSON.parse(v):[];}catch(e){return [];}
+}
+async function saveDemandas(){
+  if(useSb&&SB){
+    try{await SB.from('demandas').upsert({id:'__all__',data:demandas});}
+    catch(e){console.error('[demandas] save:',e);}
+    return;
+  }
+  try{localStorage.setItem('painel:demandas',JSON.stringify(demandas));}catch(e){}
+}
+function getMyName(){
+  if(currentUser&&currentUser.email){
+    const me=(DB.team||[]).find(p=>p.email&&p.email.toLowerCase()===(currentUser.email||'').toLowerCase());
+    if(me)return me.nome;
+    return currentUser.email.split('@')[0];
+  }
+  return null;
+}
+function getDemandaTargets(){
+  // Gerente pode enviar para todos
+  if(isManager)return DB.team||[];
+  // Time TCL só pode enviar para agências (empresa diferente da interna)
+  return (DB.team||[]).filter(p=>p.empresa&&p.empresa!==DB.empresaInterna);
+}
+function dmdStatusLabel(s){
+  return {aberta:'Aberta',em_andamento:'Em andamento',concluida:'Conclu\u00edda',cancelada:'Cancelada'}[s]||s;
+}
+async function createDemanda(){
+  const titulo=($('#dmd_titulo')||{}).value?.trim();
+  const para=($('#dmd_para')||{}).value;
+  const prazo=($('#dmd_prazo')||{}).value||'';
+  const desc=($('#dmd_desc')||{}).value?.trim()||'';
+  if(!titulo){const el=$('#dmd_titulo');if(el){el.focus();el.style.borderColor='var(--red)';}return;}
+  if(!para){toast('Selecione para quem enviar a demanda.');return;}
+  const de=getMyName()||'Equipe';
+  demandas.unshift({id:id(),titulo,desc,prazo,para,de,status:'aberta',criadoEm:new Date().toISOString().slice(0,10)});
+  await saveDemandas();
+  ['dmd_titulo','dmd_para','dmd_prazo','dmd_desc'].forEach(fid=>{const el=$('#'+fid);if(el)el.value='';});
+  const el=$('#dmd_titulo');if(el)el.style.borderColor='';
+  refreshDemandas();toast('Demanda enviada \u2713');
+}
+async function updateDemandaStatus(dId,status){
+  const d=demandas.find(x=>x.id===dId);if(!d)return;
+  d.status=status;d.atualizadoEm=new Date().toISOString().slice(0,10);
+  await saveDemandas();refreshDemandas();
+}
+async function deleteDemanda(dId){
+  if(!confirm('Excluir esta demanda?'))return;
+  demandas=demandas.filter(x=>x.id!==dId);
+  await saveDemandas();refreshDemandas();toast('Demanda exclu\u00edda');
+}
+function refreshDemandas(){
+  const el=$('#demandasSection');if(el)el.innerHTML=demandasHTML();
+}
+function demandasHTML(){
+  const myName=getMyName();
+  const targets=getDemandaTargets();
+
+  // Permissão: somente quem é do time interno ou manager cria demandas
+  const meTeam=(DB.team||[]).find(p=>p.nome===myName);
+  const canCreate=!!(meTeam||isManager);
+
+  // Separar demandas: enviadas por mim, recebidas por mim, todas (gestor)
+  const enviadas=demandas.filter(d=>d.de===myName);
+  const recebidas=demandas.filter(d=>d.para===myName);
+  const demaisGestor=isManager?demandas.filter(d=>d.de!==myName&&d.para!==myName):[];
+
+  const dmdCard=(d,canDel)=>{
+    const dd=daysTo(d.prazo);
+    const prazoLabel=!d.prazo?'':(dd<0?`<span class="dmd-late">${Math.abs(dd)}d atrasada</span>`:(dd===0?'<span class="dmd-late">vence hoje</span>':`em ${dd}d`));
+    const statusOpts=['aberta','em_andamento','concluida','cancelada'].map(s=>`<option value="${s}" ${d.status===s?'selected':''}>${dmdStatusLabel(s)}</option>`).join('');
+    return `<div class="dmd-card ${d.status}">
+      <div class="dmd-header">
+        <span class="dmd-titulo">${esc(d.titulo)}</span>
+        <span class="dmd-badge ${d.status}">${dmdStatusLabel(d.status)}</span>
+      </div>
+      <div class="dmd-meta">
+        <span>\ud83d\udce4 De: <b>${esc(d.de)}</b></span>
+        <span>\ud83d\udce5 Para: <b>${esc(d.para)}</b></span>
+        ${d.prazo?`<span>\ud83d\udcc5 ${fmtDate(d.prazo)} ${prazoLabel}</span>`:''}
+        <span style="margin-left:auto;font-size:11px">criada ${fmtDate(d.criadoEm)}</span>
+      </div>
+      ${d.desc?`<div class="dmd-desc">${esc(d.desc)}</div>`:''}
+      <div class="dmd-footer">
+        <select class="dmd-status-sel" onchange="updateDemandaStatus('${d.id}',this.value)">${statusOpts}</select>
+        ${canDel?`<button class="atv-btn" style="color:var(--red);border-color:var(--red-bg)" onclick="deleteDemanda('${d.id}')">Excluir</button>`:''}
+      </div>
+    </div>`;
+  };
+
+  // Form de nova demanda
+  const targetOpts=targets.length
+    ?[`<option value="">Selecione...</option>`,...targets.map(p=>`<option value="${esc(p.nome)}">${esc(p.nome)}${p.empresa?' \u00b7 '+esc(p.empresa):''}</option>`)].join('')
+    :`<option value="">Nenhum dispon\u00edvel</option>`;
+
+  const permLabel=isManager
+    ?'Pode direcionar para todo o time e ag\u00eancias'
+    :'Pode direcionar apenas para ag\u00eancias';
+
+  const formSection=canCreate?`
+    <div class="panel" style="margin-top:20px">
+      <div class="panel-h"><h3>\ud83d\udce4 Nova demanda</h3><span class="tag">${permLabel}</span></div>
+      <div class="panel-b" style="padding:16px">
+        <div class="dmd-form">
+          <div>
+            <label>T\u00edtulo da demanda</label>
+            <input id="dmd_titulo" placeholder="Ex.: Criar briefing da campanha..." onkeydown="if(event.key==='Enter')createDemanda()">
+          </div>
+          <div>
+            <label>Para quem</label>
+            <select id="dmd_para">${targetOpts}</select>
+          </div>
+          <div>
+            <label>Prazo (opcional)</label>
+            <input id="dmd_prazo" type="date">
+          </div>
+          <div>
+            <label>Descri\u00e7\u00e3o / contexto (opcional)</label>
+            <input id="dmd_desc" placeholder="Detalhes, links, refer\u00eancias...">
+          </div>
+        </div>
+        <button class="btn-acc" onclick="createDemanda()">\ud83d\udce4 Enviar demanda</button>
+      </div>
+    </div>`:'';
+
+  const envList=enviadas.length?enviadas.map(d=>dmdCard(d,true)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda enviada ainda.</div>`;
+  const recList=recebidas.length?recebidas.map(d=>dmdCard(d,false)).join(''):`<div class="empty" style="padding:24px">Nenhuma demanda recebida ainda.</div>`;
+  const demaisSection=demaisGestor.length?`
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-h"><h3>\ud83d\udcca Todas as demandas do time</h3><span class="tag">${demaisGestor.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativas</span></div>
+      <div class="panel-b" style="padding:8px">${demaisGestor.map(d=>dmdCard(d,true)).join('')}</div>
+    </div>`:'';
+
+  return `${formSection}
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-h"><h3>\ud83d\udce4 Demandas enviadas</h3><span class="tag">${enviadas.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativa(s)</span></div>
+      <div class="panel-b" style="padding:8px">${envList}</div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-h"><h3>\ud83d\udce5 Demandas recebidas</h3><span class="tag">${recebidas.filter(d=>d.status==='aberta'||d.status==='em_andamento').length} ativa(s)</span></div>
+      <div class="panel-b" style="padding:8px">${recList}</div>
+    </div>
+    ${demaisSection}`;
 }
 
 boot();
