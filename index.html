@@ -406,13 +406,13 @@
       <button data-v="equipe" id="navEquipe" class="hide"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Equipe</button>
       <button data-v="status"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Status Semanal</button>
       <button data-v="atividades"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11" stroke-linecap="round"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" stroke-linecap="round"/></svg>Atividades</button>
+      <button data-v="po" id="navPOControl" class="hide" style="margin-top:8px;border-top:1px solid #2a2d38;padding-top:12px"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="9" height="9" rx="1.5"/><rect x="13" y="3" width="9" height="9" rx="1.5"/><rect x="2" y="14" width="9" height="9" rx="1.5"/><rect x="13" y="14" width="9" height="9" rx="1.5"/></svg>Controle de PO</button>
     </nav>
     <div class="side-foot">
       <button id="syncBtn" class="hide" onclick="syncFromRemote()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9 9 9 0 01-6.7-3M3 12a9 9 0 019-9 9 9 0 016.7 3M21 3v6h-6M3 21v-6h6"/></svg>Sincronizar</button>
       <div id="acctInfo" class="acct-info hide" title="Conta conectada"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg><span id="acctLbl">Conta</span></div>
       <button id="logoutBtn" class="logout hide" onclick="acctMenu()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 17l5-5-5-5M21 12H9M12 19a7 7 0 110-14"/></svg>Sair do painel</button>
       <button id="btnConvidar" class="invite hide" onclick="openInviteModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Convidar pessoa</button>
-      <a id="linkPOControl" class="hide" href="https://lil-bucket.github.io/controle-po/" target="_blank" style="width:100%;padding:10px;border-radius:9px;background:var(--ink-2);color:#cfd2da;font-weight:600;font-size:12.5px;display:flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;transition:.15s;box-sizing:border-box"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17h7M17 14v7"/></svg>Portal PO Control <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.6"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
       <button onclick="openPeople()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 14.2c2.7.4 5 2.7 5 5.8"/></svg>Pessoas & empresas</button>
       <button onclick="exportJSON()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Backup (.json)</button>
       <button class="reset" onclick="resetAll()">Limpar tudo</button>
@@ -439,6 +439,7 @@
     <section class="view hide" id="view-equipe"></section>
     <section class="view hide" id="view-status"></section>
     <section class="view hide" id="view-atividades"></section>
+    <section class="view hide" id="view-po" style="padding:0;overflow:hidden;display:none"></section>
   </main>
 </div>
 <div class="scrim" id="scrim" onclick="closeSidebar()"></div>
@@ -642,7 +643,7 @@ function applyRole(){
   if(useSb&&currentUser)checkPOAccess(currentUser.email);
 }
 async function checkPOAccess(email){
-  const link=$('#linkPOControl');if(!link)return;
+  const navPO=$('#navPOControl');if(!navPO)return;
   if(!PO_ANON_KEY||PO_ANON_KEY.startsWith('COLE_'))return; // placeholder não preenchido
   try{
     const r=await fetch('https://uryzzerzmmuwuqxjwwec.supabase.co/rest/v1/rpc/tem_acesso',{
@@ -651,8 +652,27 @@ async function checkPOAccess(email){
       body:JSON.stringify({p_email:(email||'').toLowerCase()})
     });
     const result=await r.json();
-    if(result===true)link.classList.remove('hide');
+    if(result===true)navPO.classList.remove('hide');
   }catch(e){console.warn('[PO link] check falhou:',e);}
+}
+
+/* ===== CONTROLE DE PO (iframe embutido) ===== */
+let poLoaded=false;
+function renderPO(){
+  const el=$('#view-po');if(!el)return;
+  // Remove hide e ajusta display (o .hide usa display:none!important)
+  el.style.cssText='padding:0;overflow:hidden;flex:1;display:flex;flex-direction:column';
+  if(!poLoaded){
+    poLoaded=true;
+    el.innerHTML=`
+      <div style="background:var(--paper-2);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <span style="font-size:13px;color:var(--txt-3);font-weight:600">Controle de PO — TCL SEMP · O login já está ativo</span>
+        <a href="https://lil-bucket.github.io/controle-po/" target="_blank" style="font-size:12px;color:var(--accent);font-weight:600;text-decoration:none">Abrir em nova aba ↗</a>
+      </div>
+      <iframe src="https://lil-bucket.github.io/controle-po/"
+        style="flex:1;width:100%;border:none;display:block"
+        title="Controle de PO"></iframe>`;
+  }
 }
 async function acctMenu(){if(!useSb)return;if(confirm('Sair da conta '+((currentUser&&currentUser.email)||'')+'?'))signOut();}
 function filtered(){const r=$('#fResp').value,s=$('#fStatus').value;return DB.projects.filter(p=>(!r||p.resp===r)&&(!s||p.status===s));}
@@ -660,12 +680,14 @@ async function init(){let d=await loadData();if(!d||!d.projects){d=seed();await 
 function buildFilters(){const fr=$('#fResp');fr.innerHTML='<option value="">Todos respons\u00e1veis</option>';DB.team.forEach(t=>fr.innerHTML+=`<option value="${esc(t.nome)}">${esc(t.nome)}${t.empresa?' \u00b7 '+esc(t.empresa):''}</option>`);const fs=$('#fStatus');fs.innerHTML='<option value="">Todos status</option>';STATUS.forEach(s=>fs.innerHTML+=`<option value="${s.id}">${s.name}</option>`);}
 function bindNav(){document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');activeView=b.dataset.v;
-  document.querySelectorAll('.view').forEach(v=>v.classList.add('hide'));$('#view-'+activeView).classList.remove('hide');
-  const T={dash:['Dashboard Executivo','Vis\u00e3o geral do portf\u00f3lio do time'],kanban:['Quadro de Etapas','Em que est\u00e1gio est\u00e1 cada projeto'],table:['Lista de Projetos','Projetos, respons\u00e1veis, prazos e status atual'],gantt:['Cronograma','Linha do tempo \u2014 clique no projeto para abrir as atividades'],equipe:['Equipe \u2014 Volume de Trabalho','Carga de cada pessoa do time'],status:['Status Semanal','Resumo objetivo pronto para compartilhar'],atividades:['Minhas atividades','Suas tarefas pessoais \u2014 privado, s\u00f3 voc\u00ea v\u00ea']};
+  document.querySelectorAll('.view').forEach(v=>{v.classList.add('hide');v.style.display='';});
+  const vEl=$('#view-'+activeView);if(vEl){vEl.classList.remove('hide');if(activeView==='po')vEl.style.cssText='padding:0;overflow:hidden;flex:1;display:flex;flex-direction:column';}
+  const T={dash:['Dashboard Executivo','Vis\u00e3o geral do portf\u00f3lio do time'],kanban:['Quadro de Etapas','Em que est\u00e1gio est\u00e1 cada projeto'],table:['Lista de Projetos','Projetos, respons\u00e1veis, prazos e status atual'],gantt:['Cronograma','Linha do tempo \u2014 clique no projeto para abrir as atividades'],equipe:['Equipe \u2014 Volume de Trabalho','Carga de cada pessoa do time'],status:['Status Semanal','Resumo objetivo pronto para compartilhar'],atividades:['Minhas atividades','Suas tarefas pessoais \u2014 privado, s\u00f3 voc\u00ea v\u00ea'],po:['Controle de PO','Portal de ordens de compra']};
+  if(activeView==='po'){$('#vTitle').textContent='Controle de PO';$('#vSub').textContent='Portal de ordens de compra';closeSidebar();renderPO();return;}
   $('#vTitle').textContent=T[activeView][0];$('#vSub').textContent=T[activeView][1];closeSidebar();render();});}
 function toggleSidebar(){const s=document.querySelector('.side'),sc=$('#scrim');const open=s.classList.toggle('open');if(sc)sc.classList.toggle('show',open);}
 function closeSidebar(){const s=document.querySelector('.side'),sc=$('#scrim');if(s)s.classList.remove('open');if(sc)sc.classList.remove('show');}
-function render(){refreshAuto();({dash:renderDash,kanban:renderKanban,table:renderTable,gantt:renderGantt,equipe:renderEquipe,status:renderStatus,atividades:renderAtividades}[activeView])();}
+function render(){if(activeView==='po'){renderPO();return;}refreshAuto();({dash:renderDash,kanban:renderKanban,table:renderTable,gantt:renderGantt,equipe:renderEquipe,status:renderStatus,atividades:renderAtividades}[activeView])();}
 function seed(){
   const team=[{nome:'Ana Souza',empresa:'TCL'},{nome:'Bruno Lima',empresa:'TCL'},{nome:'Carla Dias',empresa:'TCL'},
     {nome:'Marina Reis',empresa:'Ag\u00eancia Criativa'},{nome:'Pedro Alves',empresa:'Ag\u00eancia de Influ\u00eancia'},{nome:'Lia Castro',empresa:'Ag\u00eancia Web'}];
